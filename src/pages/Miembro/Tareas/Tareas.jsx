@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import SideBarMember from '../components/sideBarMember';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import Footer from "../../../components/Footer";
 
 const Tareas = () => {
   const [tareas, setTareas] = useState([]);
@@ -13,6 +14,7 @@ const Tareas = () => {
   const [fechaInicioTarea, setFechaInicioTarea] = useState('');
   const [fechaFinTarea, setFechaFinTarea] = useState('');
   const [modalAgregar, setModalAgregar] = useState(false);
+  const [busqueda, setBusqueda] = useState('');
 
   useEffect(() => {
     const storedTareasCompletadas = JSON.parse(localStorage.getItem('tareasCompletadas')) || [];
@@ -78,10 +80,36 @@ const Tareas = () => {
     });
   };
 
+
+  const handleBuscarTarea = () => {
+    return tareas.filter(tarea => tarea.nombre.toLowerCase().includes(busqueda.toLowerCase()));
+  };
+
   return (
-    <div className="flex">
-      <SideBarMember />
-      <div className="flex flex-col flex-grow mx-4">
+   
+<div>
+<div className="ml-10 mb-6 mr-10 md:ml-20 md:mr-20 lg:ml-40 lg:mr-40">
+  <h1 className="text-2xl md:text-2xl lg:text-3xl">SISTEMA GESTION DE PROYECTOS</h1>
+  <div className="flex justify-end items-center mt-4">
+    <div className="border border-black rounded-lg mr-2">
+      <select className="p-1 appearance-none bg-transparent w-20 border-none text-black">
+        <option value="Miembro" selected>Miembro</option>
+      </select>
+    </div>
+    <div className="border border-black rounded-lg">
+      <select className="p-1 appearance-none bg-transparent border-none w-20 text-black">
+        <option value="User">Usuario</option>
+      </select>
+    </div>
+  </div>
+  <div className="mx-auto w-2/3 border-t-2 border-purple-900 my-6"></div>
+</div>
+
+
+
+      <div className="flex">
+              <SideBarMember />
+      <div className="flex flex-col flex-grow mx-4 ">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-4xl font-semibold">Tareas</h1>
           <div>
@@ -90,6 +118,17 @@ const Tareas = () => {
               {mostrarCompletadas ? 'Ocultar Completadas' : 'Mostrar Completadas'}
             </button>
           </div>
+        </div>
+
+    
+        <div className="mb-4">
+          <input 
+            type="text" 
+            placeholder="Buscar tarea por nombre" 
+            value={busqueda} 
+            onChange={(e) => setBusqueda(e.target.value)} 
+            className="border w-72 border-gray-300 rounded-md p-2 " 
+          />
         </div>
 
         <div className="overflow-x-auto">
@@ -105,7 +144,7 @@ const Tareas = () => {
               </tr>
             </thead>
             <tbody>
-              {tareas.map((tarea, index) => (
+              {handleBuscarTarea().map((tarea, index) => (
                 <tr key={index}>
                   <td className="border px-4 py-2">{index + 1}</td>
                   <td className="border px-4 py-2 cursor-pointer" onClick={() => handleMostrarDetalles(tarea)}>{tarea.nombre}</td>
@@ -162,7 +201,10 @@ const Tareas = () => {
           </div>
         </div>
       )}
+      <Footer />
     </div>
+    </div>
+    
   );
 };
 
