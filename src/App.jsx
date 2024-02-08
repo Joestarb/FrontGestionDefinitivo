@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from "./pages/Login/Login"
 import Proyectos from "./pages/Admin/Proyectos/Proyectos"
 import SideBar from "./components/SideBar"
+import Footer from './components/Footer';
 function App() {
   return (
     <BrowserRouter>
@@ -16,12 +17,13 @@ function App() {
           element={
             <div className='flex flex-row'>
               <SideBar />
-              <div className='  mt-16 w-full'>
+              <div className='  mt-24  w-full'>
 
                 <Routes>
                   <Route path="/proyectos" element={<Proyectos />} />
                 </Routes>
               </div>
+              <Footer/>
 
             </div>
           }
