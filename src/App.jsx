@@ -17,7 +17,7 @@ function App() {
           element={
             <div className='flex flex-row'>
               <SideBar />
-              <div className='  mt-24  w-full'>
+              <div className=' w-full'>
 
                 <Routes>
                   <Route path="/proyectos" element={<Proyectos />} />
