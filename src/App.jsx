@@ -5,6 +5,7 @@ import Login from "./pages/Login/Login"
 import Proyectos from "./pages/Admin/Proyectos/Proyectos"
 import SideBar from "./components/SideBar"
 import Footer from './components/Footer';
+import Navbar from './components/Navbar';
 function App() {
   return (
     <BrowserRouter>
@@ -15,14 +16,18 @@ function App() {
         <Route
           path="/administrador/*"
           element={
-            <div className='flex flex-row'>
+            <div>
               <SideBar />
-              <div className=' w-full'>
-
-                <Routes>
-                  <Route path="/proyectos" element={<Proyectos />} />
-                </Routes>
+              <div className='flex'>
+              <div className="flex border-r-[#cccccc] border h-[80vh] w-[4.8vw] flex-col">
+                
+                </div>
+  
+                  <Routes>
+                    <Route path="/proyectos" element={<Proyectos />} />
+                  </Routes>
               </div>
+
               <Footer/>
 
             </div>

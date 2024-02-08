@@ -5,11 +5,9 @@ import Esquina from "./Esquina";
 function SideBarAdmin() {
   return (
     <>
-    <div className="">
+    <div>
     <Navbar />
-      <div className="flex border-r-[#cccccc] border h-[80vh] w-[4.8vw] flex-col">
-        <div></div>
-      </div>
+
     </div>
     </>
   );
