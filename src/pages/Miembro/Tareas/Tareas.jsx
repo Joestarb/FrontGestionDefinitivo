@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import Footer from "../../../components/Footer";
 
 const Tareas = () => {
+  
   const [tareas, setTareas] = useState([]);
   const [tareasCompletadas, setTareasCompletadas] = useState([]);
   const [mostrarCompletadas, setMostrarCompletadas] = useState(false);
@@ -16,12 +17,25 @@ const Tareas = () => {
   const [modalAgregar, setModalAgregar] = useState(false);
   const [busqueda, setBusqueda] = useState('');
 
-  useEffect(() => {
-    const storedTareasCompletadas = JSON.parse(localStorage.getItem('tareasCompletadas')) || [];
-    setTareasCompletadas(storedTareasCompletadas);
+  const formatearFecha = (fechaString) => {
+    const fecha = new Date(fechaString);
+    const dia = fecha.getDate();
+    const mes = fecha.getMonth() + 1; 
+    const año = fecha.getFullYear();
+    const diaFormateado = dia < 10 ? '0' + dia : dia;
+    const mesFormateado = mes < 10 ? '0' + mes : mes;
+    return `${diaFormateado}/${mesFormateado}/${año}`;
+  };
+  
 
-    axios.get('https://localhost:8080/tarea')
+  
+
+  
+  useEffect(() => {
+    const id = sessionStorage.getItem('id')
+    axios.get(`https://localhost:8080/tareas/${id}`)
       .then(response => {
+        console.log(response.data)
         setTareas(response.data);
       })
       .catch(error => {
@@ -66,7 +80,7 @@ const Tareas = () => {
       fecha_fin: fechaFinTarea
     })
     .then(response => {
-      setTareas([...tareas, response.data]);
+      setTareas([...tareas, response.tareas ]);
       setNombreTarea('');
       setDescripcionTarea('');
       setFechaInicioTarea('');
@@ -81,130 +95,73 @@ const Tareas = () => {
   };
 
 
-  const handleBuscarTarea = () => {
-    return tareas.filter(tarea => tarea.nombre.toLowerCase().includes(busqueda.toLowerCase()));
-  };
+  const tareasFiltradas = tareas.filter(tarea => tarea.nombre.toLowerCase().includes(busqueda.toLowerCase()));
+
 
   return (
-   
-<div>
-<div className="ml-10 mb-6 mr-10 md:ml-20 md:mr-20 lg:ml-40 lg:mr-40">
-  <h1 className="text-2xl md:text-2xl lg:text-3xl">SISTEMA GESTION DE PROYECTOS</h1>
-  <div className="flex justify-end items-center mt-4">
-    <div className="border border-black rounded-lg mr-2">
-      <select className="p-1 appearance-none bg-transparent w-20 border-none text-black">
-        <option value="Miembro" selected>Miembro</option>
-      </select>
-    </div>
-    <div className="border border-black rounded-lg">
-      <select className="p-1 appearance-none bg-transparent border-none w-20 text-black">
-        <option value="User">Usuario</option>
-      </select>
-    </div>
-  </div>
-  <div className="mx-auto w-2/3 border-t-2 border-purple-900 my-6"></div>
-</div>
+    <div className=' w-full'>
+      <div className='flex justify-between mx-[1%] py-[.5%] '>
+        <p className=' text-4xl font-semibold'> Proyecto </p>
 
 
+      </div>  
 
-      <div className="flex">
-              <SideBarMember />
-      <div className="flex flex-col flex-grow mx-4 ">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-4xl font-semibold">Tareas</h1>
-          <div>
-            <button className="bg-black text-white rounded-xl py-2 px-4 font-semibold mr-4" onClick={toggleModalAgregar}>+ Agregar tarea</button>
-            <button className="bg-black text-white rounded-xl py-2 px-4 font-semibold" onClick={toggleMostrarCompletadas}>
-              {mostrarCompletadas ? 'Ocultar Completadas' : 'Mostrar Completadas'}
-            </button>
+      <div className=' mx-10'>
+        <div className=' flex  text-lg  font-semibold border-b-2 border-[#cccccc] mt-12'>
+          <div className='flex justify-around w-[35%] my-[.5%]'>
+          <p className='border-b-2 border-[#2E0364] px-2 text-[#2E0364] '>Proyecto</p>
+          <p>Equipo</p>
+          <p>Recurso</p>
           </div>
         </div>
 
-    
-        <div className="mb-4">
+        <section className='flex flex-row mt-4 items-center mx[1%]'>
+          <p className='text-lg'>Buscar:</p>
           <input 
-            type="text" 
-            placeholder="Buscar tarea por nombre" 
-            value={busqueda} 
-            onChange={(e) => setBusqueda(e.target.value)} 
-            className="border w-72 border-gray-300 rounded-md p-2 " 
+            type="search"  
+            className='border-[#CCCCCC] border-2 mx-[1%] border-b-2-[#cccccc] px-[.5%] mt-2 rounded-md text-sm'
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
           />
-        </div>
+        </section>
+
 
         <div className="overflow-x-auto">
-          <table className="w-full table-auto">
-            <thead>
-              <tr>
-                <th className="px-4 py-2">#</th>
-                <th className="px-4 py-2">Nombre</th>
-                <th className="px-4 py-2">Descripción</th>
-                <th className="px-4 py-2">Fecha de Inicio</th>
-                <th className="px-4 py-2">Fecha de Fin</th>
-                <th className="px-4 py-2">Completada</th>
-              </tr>
-            </thead>
-            <tbody>
-              {handleBuscarTarea().map((tarea, index) => (
-                <tr key={index}>
-                  <td className="border px-4 py-2">{index + 1}</td>
-                  <td className="border px-4 py-2 cursor-pointer" onClick={() => handleMostrarDetalles(tarea)}>{tarea.nombre}</td>
-                  <td className="border px-4 py-2">{tarea.descripcion}</td>
-                  <td className="border px-4 py-2">{new Date(tarea.fecha_inicio).toLocaleDateString()}</td>
-                  <td className="border px-4 py-2">{new Date(tarea.fecha_fin).toLocaleDateString()}</td>
-                  <td className="border px-4 py-2">
-                    <button onClick={() => handleCompletarTarea(tarea.id_tarea)} className="bg-green-500 text-white px-4 py-2 rounded">Completar</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      <table className="table-auto w-full">
+        <thead>
+          <tr>
+            <th className="border-b-2 px-4 py-2 text-sm">ID</th>
+            <th className="border-b-2 px-4 py-2 text-sm">Nombre</th>
+            <th className="border-b-2 px-4 py-2 text-sm">Descripción</th>
+            <th className="border-b-2 px-4 py-2 text-sm">Inicio</th>
+            <th className="border-b-2 px-4 py-2 text-sm">Final</th>
+            <th className="border-b-2 px-4 py-2 text-sm">Proyecto</th>
+            <th className="border-b-2 px-4 py-2 text-sm">Equipo</th>
+            <th className="border-b-2 px-4 py-2 text-sm">Usuario</th>
+          </tr>
+        </thead>
+        <tbody>
+          {tareasFiltradas.map(item => (
+            <tr key={item.id} className='text-center'>
+              <td className="border-b-2 px-4 py-2 text-sm">{item.id}</td>
+              <td className="border-b-2 px-4 py-2 text-sm">{item.nombre}</td>
+              <td className="border-b-2 px-4 py-2 text-sm">{item.descripcion}</td>
+              <td className="border-b-2 px-4 py-2 text-sm">{formatearFecha(item.inicio)}</td>
+              <td className="border-b-2 px-4 py-2 text-sm">{formatearFecha(item.final)}</td>
+              <td className="border-b-2 px-4 py-2 text-sm">{item.proyecto}</td>
+              <td className="border-b-2 px-4 py-2 text-sm">{item.equipo}</td>
+              <td className="border-b-2 px-4 py-2 text-sm">{item.usuario}</td>{/* Aquí puedes agregar botones de acción si es necesario */}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
       </div>
 
-      {mostrarCompletadas && (
-        <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-800 bg-opacity-50">
-          <div className="bg-white p-8 rounded shadow-lg overflow-y-auto max-h-full">
-            <h2 className="text-xl font-semibold mb-4">Tareas Completadas</h2>
-            <ul>
-              {tareasCompletadas.map((tarea, index) => (
-                <li key={index} className="cursor-pointer" onClick={() => handleMostrarDetalles(tarea)}>{tarea.nombre}</li>
-              ))}
-            </ul>
-            <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={toggleMostrarCompletadas}>Cerrar</button>
-          </div>
-        </div>
-      )}
 
-      {modalTarea && (
-        <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-800 bg-opacity-50">
-          <div className="bg-white p-8 rounded shadow-lg">
-            <h2 className="text-xl font-semibold mb-4">Detalles de Tarea</h2>
-            <p><strong>Nombre:</strong> {modalTarea.nombre}</p>
-            <p><strong>Descripción:</strong> {modalTarea.descripcion}</p>
-            <p><strong>Fecha de Inicio:</strong> {new Date(modalTarea.fecha_inicio).toLocaleDateString()}</p>
-            <p><strong>Fecha de Fin:</strong> {new Date(modalTarea.fecha_fin).toLocaleDateString()}</p>
-            <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={closeModal}>Cerrar</button>
-          </div>
-        </div>
-      )}
 
-      {modalAgregar && (
-        <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-800 bg-opacity-50">
-          <div className="bg-white p-8 rounded shadow-lg">
-            <h2 className="text-xl font-semibold mb-4">Agregar Tarea</h2>
-            <input type="text" placeholder="Nombre" value={nombreTarea} onChange={(e) => setNombreTarea(e.target.value)} className="mb-2 w-full p-2 border rounded" />
-            <input type="text" placeholder="Descripción" value={descripcionTarea} onChange={(e) => setDescripcionTarea(e.target.value)} className="mb-2 w-full p-2 border rounded" />
-            <input type="date" placeholder="Fecha de Inicio" value={fechaInicioTarea} onChange={(e) => setFechaInicioTarea(e.target.value)} className="mb-2 w-full p-2 border rounded" />
-            <input type="date" placeholder="Fecha de Fin" value={fechaFinTarea} onChange={(e) => setFechaFinTarea(e.target.value)} className="mb-2 w-full p-2 border rounded" />
-            <button className="bg-green-500 text-white px-4 py-2 rounded" onClick={handleAgregarTarea}>Agregar</button>
-            <button className="bg-red-500 text-white px-4 py-2 rounded ml-2" onClick={toggleModalAgregar}>Cancelar</button>
-          </div>
-        </div>
-      )}
-      <Footer />
     </div>
-    </div>
-    
   );
 };
 
