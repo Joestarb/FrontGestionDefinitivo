@@ -11,6 +11,7 @@ import SideBarLider from "./components/Lider/SidebarLider";
 import Inicio from './pages/Lider/Inicio';
 import Equipos from './pages/Admin/Equipos/Equipos';
 import RecursosAdmin from './pages/Admin/Recursos/Recursos';
+import Error404 from './pages/Erro404'
 
 function App() {
   const cerrarSesion = () => {
@@ -35,7 +36,10 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-        
+        <Route path="/*" element={<Error404 />} />
+        <Route path="/admin/*" element={<Error404 />} />
+        <Route path="/miembro/*" element={<Error404 />} />
+        <Route path="/lider/*" element={<Error404 />} />
         {/* Rutas para el rol de administrador */}
         <Route
           path="/admin/*"
@@ -97,13 +101,25 @@ function App() {
         <Route
           path="/lider/*"
           element={verificarRol('Lider') && (
-            <div className='flex flex-row'>
-              <SideBarLider />
-              <div className='  mt-24  w-full'>
+
+
+
+
+                        <div>
+              <SideBar />
+              <div className='flex '>
+                <div className="flex border-r-[#cccccc] border h-[84vh] w-[5.1vw] flex-col justify-start py-[1.5%] gap-[10%] items-center">
+                  <img className='w-[50%]' src={proyectos} />
+                  <Link to="/">
+                    <img className='w-[100%]' src={cerrar} onClick={cerrarSesion} />
+                  </Link>
+                </div>
+
                 <Routes>
-                  <Route path="proyectos" element={<Inicio />} />
+                <Route path="proyectos" element={<Inicio />} />
                 </Routes>
               </div>
+
               <Footer />
             </div>
           )}

@@ -39,8 +39,11 @@ if (email.trim() !== '' && email.trim() === email.trimStart() && password.trim()
                 navigate('/administrador/proyectos');
             } else if(data.nombre_rol === 'Lider'){
                 navigate('/Lider/proyectos');
+                navigate('/Lider/equipos');
+                navigate('/Lider/recursos');
             } else {
                 navigate('/miembro/tareas');
+
             }
             
         } else {

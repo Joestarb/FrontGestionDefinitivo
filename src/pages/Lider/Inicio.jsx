@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ProyectosTabla from './Equipo/Components/ProyectosTabla';
 import Recursos from './Recursos/Recursos';
+import Navbar from '../../components/Navbar';
 
 const Inicio = () => {
   const [mostrarProyectos, setMostrarProyectos] = useState(true);
@@ -19,7 +20,7 @@ const Inicio = () => {
   return (
     <div>
       <div className='flex justify-between mx-2'>
-        <p className='text-4xl font-semibold'> Equipo </p>
+        <p className='text-4xl font-semibold'> Lider </p>
       </div>
 
       <div className='mx-10'>
