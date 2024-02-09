@@ -1,5 +1,4 @@
 // App.js
-import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from "./pages/Login/Login"
 import Proyectos from "./pages/Admin/Proyectos/Proyectos"
@@ -8,6 +7,8 @@ import Footer from './components/Footer';
 import Navbar from './components/Navbar';
 import cerrar from './assets/Sidebar/cerrar.svg'
 import proyectos from './assets/Sidebar/proyectos.svg'
+import Equipos from './pages/Admin/Equipos/Equipos';
+import Recursos from './pages/Admin/Recursos/Recursos';
 function App() {
   return (
     <BrowserRouter>
@@ -28,6 +29,8 @@ function App() {
   
                   <Routes>
                     <Route path="/proyectos" element={<Proyectos />} />
+                    <Route path="/equipos" element=  {<Equipos />} />
+                    <Route path="/recursos" element= {<Recursos />} />
                   </Routes>
               </div>
 
