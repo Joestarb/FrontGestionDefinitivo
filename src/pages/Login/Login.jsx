@@ -10,10 +10,8 @@ function Login() {
 
         <div>
 
-          <div className=" absolute right-0 top-0" >
-            <img src={rectangle} alt="rectangle" className=" w-[600px] h-screen" />
-          </div>
-          <div className=" absolute right-[200px] top-0" >
+    
+          <div className=" absolute right-[1%] top-0" >
             <img src={laptop} alt="rectangle" />
           </div>
         </div>
