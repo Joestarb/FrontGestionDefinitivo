@@ -5,6 +5,9 @@ import Login from "./pages/Login/Login"
 import Proyectos from "./pages/Admin/Proyectos/Proyectos"
 import SideBar from "./components/SideBar"
 import Footer from './components/Footer';
+import EquipoLider from './pages/Lider/Equipo/EquipoLider';
+import SideBarLider from './components/Lider/SidebarLider';
+import Erro404 from './pages/Erro404';
 function App() {
   return (
     <BrowserRouter>
@@ -23,11 +26,29 @@ function App() {
                   <Route path="/proyectos" element={<Proyectos />} />
                 </Routes>
               </div>
-              <Footer/>
-
+              <Footer />
             </div>
           }
         />
+
+
+        <Route
+          path="/Lider/*"
+          element={
+            <div className='flex flex-row'>
+              <SideBarLider />
+              <div className='  mt-24  w-full'>
+                <Routes>
+                  <Route path="/proyectos" element={<EquipoLider />} />
+
+                </Routes>
+              </div>
+              <Footer />
+            </div>
+          }
+        />
+        <Route path="/*" element={<Erro404 />} />
+
       </Routes>
     </BrowserRouter>
   );
