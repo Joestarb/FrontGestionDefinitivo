@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const Recursos = () => {
+const RecursosAdmin = () => {
   const [recursos, setRecursos] = useState([]);
   const [nombreRecurso, setNombreRecurso] = useState('');
   const [tipoRecurso, setTipoRecurso] = useState('');
@@ -247,4 +247,4 @@ const Recursos = () => {
   );
 };
 
-export default Recursos;
+export default RecursosAdmin;
