@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
+import Swal from 'sweetalert2';
 
-function SolicitarRecurso ({ onSubmit }) {
+
+
+function SolicitarRecurso({ onSubmit }) {
   const [proyectos, setProyectos] = useState([]); // Aquí almacenaremos la lista de proyectos disponibles
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -16,8 +19,20 @@ function SolicitarRecurso ({ onSubmit }) {
   };
 
   const handleSubmit = async (e) => {
-
-    window.location.reload()
+    e.preventDefault(); // Evita que se envíe el formulario por defecto
+  
+    // Verifica si hay campos vacíos o solo espacios en blanco
+    for (const key in formData) {
+      if (formData[key] === '' || /^\s+$/.test(formData[key])) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Por favor complete todos los campos',
+        });
+        return; // Detiene el envío del formulario si hay campos vacíos o solo espacios en blanco
+      }
+    }
+  
     try {
       const response = await fetch('https://localhost:8080/recurso', {
         method: 'POST',
@@ -26,18 +41,18 @@ function SolicitarRecurso ({ onSubmit }) {
         },
         body: JSON.stringify(formData)
       });
-
+  
       if (!response.ok) {
         throw new Error('Failed to submit data');
       }
-
+  
       // Aquí puedes manejar la respuesta si es necesario
       const responseData = await response.json();
       console.log('Response data:', responseData);
-
+  
       // Llamar a la función onSubmit si es necesario
       onSubmit(formData);
-
+  
       // Limpiar el formulario y cerrar el modal
       setFormData({
         tipo_recurso: '',
@@ -51,6 +66,9 @@ function SolicitarRecurso ({ onSubmit }) {
       // Aquí puedes manejar el error de alguna manera, por ejemplo, mostrar un mensaje al usuario
     }
   };
+  
+
+
   useEffect(() => {
     // Aquí realizaremos la solicitud para obtener la lista de proyectos al cargar el componente
     fetch('https://localhost:8080/proyecto')
@@ -78,7 +96,7 @@ function SolicitarRecurso ({ onSubmit }) {
             <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
             <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-            <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit}>
                 <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                   <div className="mb-4">
                     <label htmlFor="tipo_recurso" className="block text-gray-700 text-sm font-bold mb-2">Tipo de Recurso</label>
@@ -160,4 +178,4 @@ function SolicitarRecurso ({ onSubmit }) {
   );
 }
 
-export default SolicitarRecurso ;
+export default SolicitarRecurso;
