@@ -9,6 +9,7 @@ import proyectos from './assets/Sidebar/proyectos.svg'
 import Tareas from "./pages/Miembro/Tareas/Tareas"
 import  SideBarLider from "./components/Lider/SidebarLider"
 import Inicio from './pages/Lider/Inicio';
+import ProyectosTabla from './pages/Lider/Equipo/Components/ProyectosTabla';
 
 
 function App() {
@@ -75,16 +76,24 @@ function App() {
         <Route
           path="/Lider/*"
           element={
-            <div className='flex flex-row'>
-              <SideBarLider />
-              <div className='  mt-24  w-full'>
-                <Routes>
-                  <Route path="/proyectos" element={<Inicio />} />
-
-                </Routes>
+             <div>
+            <SideBar />
+            <div className='flex ' data-name="sidebar verdadero">
+              <div className="flex border-r-[#cccccc] border h-[84vh] w-[5.1vw] flex-col justify-start py-[1.5%] gap-[10%] items-center">
+                <img className='w-[50%]' src={proyectos} />
+                <Link to="/">
+                  <img className='w-[100%]' src={cerrar} onClick={cerrarSesion} />
+                </Link>
               </div>
-              <Footer />
+
+              <Routes>
+              <Route path="/proyectos" element={<Inicio />}/>
+              </Routes>
             </div>
+
+            <Footer />
+
+          </div>
           }
         />
       </Routes>

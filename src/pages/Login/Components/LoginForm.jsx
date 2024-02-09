@@ -34,7 +34,15 @@ if (email.trim() !== '' && email.trim() === email.trimStart() && password.trim()
             sessionStorage.setItem('id', data.id_usuario)
             sessionStorage.setItem('correo', data.correo_electronico);
             sessionStorage.setItem('rol', data.nombre_rol);
-            navigate('/administrador/miembros');
+
+            if(data.nombre_rol === 'Administrador'){
+                navigate('/administrador/proyectos');
+            } else if(data.nombre_rol === 'Lider'){
+                navigate('/Lider/proyectos');
+            } else {
+                navigate('/miembro/tareas');
+            }
+            
         } else {
             console.error('Error de inicio de sesión:', error.response?.data?.detail || 'Error desconocido');
             Swal.fire({
@@ -61,6 +69,7 @@ if (email.trim() !== '' && email.trim() === email.trimStart() && password.trim()
 
 
     }
+
 
     
 
