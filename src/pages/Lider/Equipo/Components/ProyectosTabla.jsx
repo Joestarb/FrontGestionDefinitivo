@@ -27,13 +27,13 @@ const ProyectosTabla = () => {
             .catch(error => console.error('Error fetching estados:', error));
 
         // Obtener equipos
-        fetch('https://localhost:8080/equipo')
+        fetch('https://localhost:8080/equipoData')  // Cambiado a equipoData
             .then(response => response.json())
             .then(data => {
                 // Convertir el arreglo de equipos en un objeto con ID como clave y nombre como valor
                 const equiposMap = {};
                 data.forEach(equipo => {
-                    equiposMap[equipo.id_equipo] = equipo.nombre;
+                    equiposMap[equipo.fk_proyecto] = equipo.nombre;  // Usando fk_proyecto como clave
                 });
                 setEquipos(equiposMap);
             })
@@ -57,6 +57,16 @@ const ProyectosTabla = () => {
         .catch(error => console.error('Error al eliminar el proyecto:', error));
     };
 
+    const formatearFecha = (fechaString) => {
+        const fecha = new Date(fechaString);
+        const dia = fecha.getDate();
+        const mes = fecha.getMonth() + 1; 
+        const año = fecha.getFullYear();
+        const diaFormateado = dia < 10 ? '0' + dia : dia;
+        const mesFormateado = mes < 10 ? '0' + mes : mes;
+        return `${diaFormateado}/${mesFormateado}/${año}`;
+      };
+
     return (
         <div className="overflow-x-auto">
             <table className="table-auto w-full">
@@ -79,9 +89,9 @@ const ProyectosTabla = () => {
                             <td className="border px-4 py-2">{proyecto.id_proyecto}</td>
                             <td className="border px-4 py-2">{proyecto.nombre}</td>
                             <td className="border px-4 py-2">{proyecto.descripcion}</td>
-                            <td className="border px-4 py-2">{proyecto.fecha_inicio}</td>
-                            <td className="border px-4 py-2">{proyecto.fecha_fin}</td>
-                            <td className="border px-4 py-2">{equipos[proyecto.fk_equipo]}</td>
+                            <td className="border px-4 py-2">{formatearFecha(proyecto.fecha_inicio)}</td>
+                            <td className="border px-4 py-2">{formatearFecha(proyecto.fecha_fin)}</td>
+                            <td className="border px-4 py-2">{equipos[proyecto.id_proyecto]}</td>  {/* Cambiado a id_proyecto */}
                             <td className="border px-4 py-2">{estados[proyecto.fk_estado]}</td>
                             <td className="border px-4 py-2">
                                 <button onClick={() => handleDeleteProyecto(proyecto.id_proyecto)} className=' text-3xl  text-red-500'><MdDelete/></button>
