@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function SolicitarRecurso ({ onSubmit }) {
+  const [proyectos, setProyectos] = useState([]); // Aquí almacenaremos la lista de proyectos disponibles
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
     tipo_recurso: '',
@@ -14,25 +15,58 @@ function SolicitarRecurso ({ onSubmit }) {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(formData);
-    setFormData({
-      tipo_recurso: '',
-      nombre: '',
-      funcionalidad: '',
-      fk_proyecto: ''
-    });
-    setIsOpen(false);
+  const handleSubmit = async (e) => {
+
+    window.location.reload()
+    try {
+      const response = await fetch('https://localhost:8080/recurso', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit data');
+      }
+
+      // Aquí puedes manejar la respuesta si es necesario
+      const responseData = await response.json();
+      console.log('Response data:', responseData);
+
+      // Llamar a la función onSubmit si es necesario
+      onSubmit(formData);
+
+      // Limpiar el formulario y cerrar el modal
+      setFormData({
+        tipo_recurso: '',
+        nombre: '',
+        funcionalidad: '',
+        fk_proyecto: ''
+      });
+      setIsOpen(false);
+    } catch (error) {
+      console.error('Error submitting data:', error);
+      // Aquí puedes manejar el error de alguna manera, por ejemplo, mostrar un mensaje al usuario
+    }
   };
+  useEffect(() => {
+    // Aquí realizaremos la solicitud para obtener la lista de proyectos al cargar el componente
+    fetch('https://localhost:8080/proyecto')
+      .then(response => response.json())
+      .then(data => setProyectos(data))
+      .catch(error => console.error('Error fetching proyectos:', error));
+  }, []); // Usamos un arreglo vacío como dependencia para que se ejecute solo una vez al montar el componente
+
 
   return (
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        className="bg-black rounded-xl absolute top-[98px] mr-7 right-0 text-white p-2 font-semibold"
       >
-        Abrir Formulario
+        Solicitar recurso
       </button>
       {isOpen && (
         <div className="fixed z-10 inset-0 overflow-y-auto">
@@ -44,7 +78,7 @@ function SolicitarRecurso ({ onSubmit }) {
             <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
             <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-              <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}>
                 <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                   <div className="mb-4">
                     <label htmlFor="tipo_recurso" className="block text-gray-700 text-sm font-bold mb-2">Tipo de Recurso</label>
@@ -86,17 +120,20 @@ function SolicitarRecurso ({ onSubmit }) {
                     />
                   </div>
                   <div className="mb-4">
-                    <label htmlFor="fk_proyecto" className="block text-gray-700 text-sm font-bold mb-2">ID del Proyecto</label>
-                    <input
-                      type="number"
+                    <label htmlFor="fk_proyecto" className="block text-gray-700 text-sm font-bold mb-2">Proyecto</label>
+                    <select
                       id="fk_proyecto"
                       name="fk_proyecto"
                       value={formData.fk_proyecto}
                       onChange={handleChange}
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      placeholder="Ingrese el ID del proyecto"
                       required
-                    />
+                    >
+                      <option value="">Seleccione un proyecto</option>
+                      {proyectos.map(proyecto => (
+                        <option key={proyecto.id_proyecto} value={proyecto.id_proyecto}>{proyecto.nombre}</option>
+                      ))}
+                    </select>
                   </div>
                 </div>
                 <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">

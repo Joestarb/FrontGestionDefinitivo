@@ -1,57 +1,64 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
+import { MdDelete } from "react-icons/md";
+import SolicitarRecurso from './Components/SolicitarRecurso';
 
 const Recursos = () => {
-  const data = [
-    {
-      id: 1,
-      estado: 'Proyecto A',
-      tipo: 'Descripción del Proyecto A',
-      funcionalidad: ['Equipo 1', 'Equipo 2'],
-      estado: "Activo",
-      Proyecto: '2024-02-01',
-    },
-    {
-      id: 2,
-      estado: 'Proyecto B',
-      tipo: 'Descripción del Proyecto B',
-      funcionalidad: ['Equipo 3', 'Equipo 4'],
-      estado: "Activo",
-      Proyecto: '2024-02-03',
-    },
-    // Agrega más datos si es necesario
-  ];
+  const [recursos, setRecursos] = useState([]);
+
+  useEffect(() => {
+    fetch('https://localhost:8080/recurso')
+      .then(response => response.json())
+      .then(data => setRecursos(data))
+      .catch(error => console.error('Error fetching recursos:', error));
+  }, []);
+
+  const handleDelete = (recursoId) => {
+    fetch(`https://localhost:8080/recurso/${recursoId}`, {
+      method: 'DELETE',
+    })
+      .then(response => {
+        if (response.ok) {
+          setRecursos(prevRecursos => prevRecursos.filter(recurso => recurso.id_recurso !== recursoId));
+        } else {
+          console.error('Error deleting recurso:', response.statusText);
+        }
+      })
+      .catch(error => console.error('Error deleting recurso:', error));
+  };
+
   return (
     <div className="overflow-x-auto">
-        <button className='bg-black rounded-xl absolute top-[98px] mr-7 right-0 text-white p-2 font-semibold'>+Agregar proyecto</button>
+      <SolicitarRecurso/>
       <table className="table-auto w-full">
         <thead>
           <tr>
             <th className="px-7 py-2">ID</th>
-            <th className="px-7 py-2">Estado</th>
-            <th className="px-7 py-2">Tipo</th>
+            <th className="px-7 py-2">Nombre</th>
+            <th className="px-7 py-2">Tipo de Recurso</th>
             <th className="px-7 py-2">Funcionalidad</th>
             <th className="px-7 py-2">Proyecto</th>
-            <th className="px-7 py-2">estado</th>
             <th className="px-7 py-2">Acciones</th>
-
           </tr>
         </thead>
         <tbody>
-          {data.map(item => (
-            <tr key={item.id}>
-              <td className="border px-4 py-2">{item.id}</td>
-              <td className="border px-4 py-2">{item.estado}</td>
-              <td className="border px-4 py-2">{item.tipo}</td>
-              <td className="border px-4 py-2">{item.funcionalidad.join(', ')}</td>
-              <td className="border px-4 py-2">{item.Proyecto}</td>
-              <td className="border px-4 py-2 bg-[#41ff3b4f] rounded-xl  w-16">{item.estado}</td>
-              <td className="border px-4 py-2">Acciones</td> {/* Aquí puedes agregar botones de acción si es necesario */}
+          {recursos.map(item => (
+            <tr key={item.id_recurso}>
+              <td className="border px-4 py-2">{item.id_recurso}</td>
+              <td className="border px-4 py-2">{item.nombre}</td>
+              <td className="border px-4 py-2">{item.tipo_recurso}</td>
+              <td className="border px-4 py-2">{item.funcionalidad}</td>
+              <td className="border px-4 py-2">{item.fk_proyecto}</td>
+              <td className="border px-4 py-2">
+                <button onClick={() => handleDelete(item.id_recurso)} className=" text-red-500 text-3xl  font-bold py-2 px-4 rounded">
+                <MdDelete/>
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
-  )
-}
+  );
+};
 
-export default Recursos
+export default Recursos;
