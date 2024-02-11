@@ -81,6 +81,7 @@ const ProyectosTabla = ({ proyectos, getColorClass, handleOpenModal, fetchRecurs
                         <div className="modal-content py-4 text-left px-6">
                             <span className="close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50" onClick={() => setSelectedProyectoId(null)}>&times;</span>
                             <h2 className="text-2xl font-bold">Recursos del Proyecto</h2>
+
                             <ul>
                                 {recursos.map(recurso => (
                                     <li key={recurso.id_recurso} className="py-2">
@@ -88,9 +89,13 @@ const ProyectosTabla = ({ proyectos, getColorClass, handleOpenModal, fetchRecurs
                                     </li>
                                 ))}
                             </ul>
+                            <button className=" bg-red-500 p-2 rounded-xl text-white" onClick={() => setSelectedProyectoId(null)}>cerrar</button>
+
                         </div>
                     </div>
+                    
                 </div>
+
             )}
 
 
