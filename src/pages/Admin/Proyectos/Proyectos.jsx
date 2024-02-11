@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ProyectoForm from "./Components/ProyectoForm";
+import ProyectosTabla from "./Components/ProyectosTabla";
+import EquiposPorProyecto from "./Components/EquiposPorProyecto";
 
 const Proyectos = () => {
   const [proyectos, setProyectos] = useState([]); // Estado para almacenar los proyectos
@@ -19,28 +21,48 @@ const Proyectos = () => {
       console.error(error);
     }
   };
+
+  const fetchRecursosPorProyecto = async (proyectoId) => {
+    try {
+      const response = await fetch(`https://localhost:8080/proyecto/${proyectoId}/recurso`);
+      if (!response.ok) {
+        throw new Error(`Error al cargar los recursos para el proyecto ${proyectoId}`);
+      }
+      const recursosData = await response.json();
+      console.log(recursosData)
+      return recursosData;
+
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  };
+
+  const fetchEquiposPorProyecto = async () => {
+    try {
+      const equiposPorProyectoData = {};
+      await Promise.all(
+        proyectos.map(async (proyecto) => {
+          const response = await fetch(`https://localhost:8080/proyecto/${proyecto.id_proyecto}/equipos`);
+          if (!response.ok) {
+            throw new Error(`Error al cargar los equipos para el proyecto ${proyecto.id_proyecto}`);
+          }
+          const equiposData = await response.json();
+          equiposPorProyectoData[proyecto.id_proyecto] = equiposData;
+          
+
+        })
+      );
+      setEquiposPorProyecto(equiposPorProyectoData);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   useEffect(() => {
     // Función para cargar los equipos por proyecto
     fetchProyectos(); // Llama a la función para cargar los proyectos cuando el componente se monta
 
-    const fetchEquiposPorProyecto = async () => {
-      try {
-        const equiposPorProyectoData = {};
-        await Promise.all(
-          proyectos.map(async (proyecto) => {
-            const response = await fetch(`https://localhost:8080/proyecto/${proyecto.id_proyecto}/equipos`);
-            if (!response.ok) {
-              throw new Error(`Error al cargar los equipos para el proyecto ${proyecto.id_proyecto}`);
-            }
-            const equiposData = await response.json();
-            equiposPorProyectoData[proyecto.id_proyecto] = equiposData;
-          })
-        );
-        setEquiposPorProyecto(equiposPorProyectoData);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+
 
     if (proyectos.length > 0) {
       fetchEquiposPorProyecto();
@@ -71,7 +93,12 @@ const Proyectos = () => {
     setSelectedProyectoId(null);
   };
 
-
+  const handleOpenRecursosModal = async (proyectoId) => {
+    setSelectedProyectoId(proyectoId);
+    const recursos = await fetchRecursosPorProyecto(proyectoId);
+    // Aquí puedes hacer algo con los recursos, como mostrarlos en un modal
+    console.log(recursos);
+  };
 
   return (
     <div className="w-full ">
@@ -94,92 +121,35 @@ const Proyectos = () => {
         </div>
 
         <section className="flex flex-row mt-4 items-center">
-          
+
         </section>
-        <div className="overflow-x-auto">
-          <table className="table-auto w-full">
-            <thead>
-              <tr>
-                <th className="border-b-2 px-4 py-2 text-sm">#</th>
-                <th className="border-b-2 px-4 py-2 text-sm">Nombre</th>
-                <th className="border-b-2 px-4 py-2 text-sm">Descripción</th>
-                <th className="border-b-2 px-4 py-2 text-sm">Equipos</th>
-                <th className="border-b-2 px-4 py-2 text-sm">
-                  Fecha de Inicio
-                </th>
-                <th className="border-b-2 px-4 py-2 text-sm">Estado</th>
-                <th className="border-b-2 px-4 py-2 text-sm">Recurso</th>
-                <th className="border-b-2 px-4 py-2 text-sm">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {proyectos.map((proyecto) => (
-                <tr key={proyecto.id_proyecto} className="text-center">
-                  <td className="border-b-2 px-4 py-2 text-sm">
-                    {proyecto.id_proyecto}
-                  </td>
-                  <td className="border-b-2 px-4 py-2 text-sm">
-                    {proyecto.nombre}
-                  </td>
-                  <td className="border-b-2 px-4 py-2 text-sm">
-                    {proyecto.descripcion}
-                  </td>
-                  <td className="border-b-2 px-4 py-2 text-sm"  >
-                    <button onClick={() => handleOpenModal(proyecto.id_proyecto)}>
-                      Ver Equipos
-                    </button>
-                  </td>
+        <ProyectosTabla
+          proyectos={proyectos}
+          getColorClass={getColorClass}
+          handleOpenModal={handleOpenModal}
+          fetchRecursosPorProyecto={fetchRecursosPorProyecto}
 
-                  <td className="border-b-2 px-4 py-2 text-sm">
-                    {proyecto.fecha_inicio}
-                  </td>
-                  <td
-                    className={`border-b-2 px-4 py-2 text-sm ${getColorClass(
-                      proyecto.fk_estado
-                    )}`}
-                  >
-                    {proyecto.fk_estado === 1
-                      ? "Completado"
-                      : proyecto.fk_estado === 2
-                        ? "Pendiente"
-                        : proyecto.fk_estado === 3
-                          ? "En Proceso"
-                          : ""}
-                  </td>
-                  <td className="border-b-2 px-4 py-2 text-sm">
-                    {proyecto.fk_recurso}
-                  </td>
-                  <td className="border-b-2 px-4 py-2 text-sm">Acciones</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+          
+        />
       </div>
-      {selectedProyectoId && (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-8 rounded-md">
+      {
+        selectedProyectoId && (
+          <EquiposPorProyecto
+          selectedProyectoId  = {selectedProyectoId }
+          equiposPorProyecto  = {equiposPorProyecto }
+          handleCloseModal   = {handleCloseModal  }
+          />
+        )
+      }
 
-            <h2 className=" text-4xl">Equipos del Proyecto {selectedProyectoId}</h2>
-            <ul className=" grid grid-cols-3 my-4  place-content-center">
-              {equiposPorProyecto[selectedProyectoId]?.map((equipo) => (
-                <li key={equipo.id_equipo}>{equipo.nombre}</li>
-              ))}
-            </ul>
-            <button className=" bg-red-500 p-2  text-white rounded-2xl" onClick={handleCloseModal}>
-              Cerrar
-            </button>
-          </div>
-
-        </div>
-      )}
-
-      {agregarProyecto &&(
-      <ProyectoForm
-      setAgregarProyecto = {setAgregarProyecto}
-      />
-      )}
-    </div>
+      {
+        agregarProyecto && (
+          <ProyectoForm
+            setAgregarProyecto={setAgregarProyecto}
+          />
+        )
+      }
+    </div >
   );
 };
 
