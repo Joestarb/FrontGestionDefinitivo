@@ -1,28 +1,9 @@
 import React, { useState, useEffect } from "react";
 
-const Modal = ({ equipos, onClose }) => {
-  return (
-    <div className="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white p-8 rounded-lg w-96">
-        <h2 className="text-2xl font-bold mb-4">Equipos</h2>
-        <ul>
-          {equipos.map((equipo) => (
-            <li key={equipo.id_equipo}>{equipo.nombre}</li>
-          ))}
-        </ul>
-        <button onClick={onClose} className="mt-4 bg-gray-800 text-white px-4 py-2 rounded-md">
-          Cerrar
-        </button>
-      </div>
-    </div>
-  );
-};
-
 const Proyectos = () => {
   const [proyectos, setProyectos] = useState([]); // Estado para almacenar los proyectos
   const [equiposPorProyecto, setEquiposPorProyecto] = useState({}); // Estado para almacenar los equipos por proyecto
-  const [selectedProjectId, setSelectedProjectId] = useState(null);
-
+  const [selectedProyectoId, setSelectedProyectoId] = useState(null); // Estado para almacenar el ID del proyecto seleccionado
 
   // Función para cargar los proyectos desde el endpoint
   const fetchProyectos = async () => {
@@ -78,14 +59,16 @@ const Proyectos = () => {
         return "";
     }
   };
-  const openModal = (projectId) => {
-    setSelectedProjectId(projectId);
+  // Función para manejar la apertura del modal y cargar los equipos correspondientes
+  const handleOpenModal = (proyectoId) => {
+    setSelectedProyectoId(proyectoId);
+    fetchEquiposPorProyecto(proyectoId);
   };
 
-  const closeModal = () => {
-    setSelectedProjectId(null);
+  // Función para cerrar el modal
+  const handleCloseModal = () => {
+    setSelectedProyectoId(null);
   };
-
 
   return (
     <div className="w-full ">
@@ -142,9 +125,13 @@ const Proyectos = () => {
                   <td className="border-b-2 px-4 py-2 text-sm">
                     {proyecto.descripcion}
                   </td>
+                  <td className="border-b-2 px-4 py-2 text-sm"  >
+                    <button onClick={() => handleOpenModal(proyecto.id_proyecto)}>
+                      Ver Equipos
+                    </button>
+                  </td>
+
                   <td className="border-b-2 px-4 py-2 text-sm">
-                                    <button onClick={() => openModal(proyecto.id_proyecto)} className="underline text-blue-500">Ver equipos</button>
-                                </td>className="border-b-2 px-4 py-2 text-sm">
                     {proyecto.fecha_inicio}
                   </td>
                   <td
@@ -166,11 +153,28 @@ const Proyectos = () => {
                   <td className="border-b-2 px-4 py-2 text-sm">Acciones</td>
                 </tr>
               ))}
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
       </div>
+      {selectedProyectoId && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-8 rounded-md">
+
+            <h2 className=" text-4xl">Equipos del Proyecto {selectedProyectoId}</h2>
+            <ul className=" grid grid-cols-3 my-4  place-content-center">
+              {equiposPorProyecto[selectedProyectoId]?.map((equipo) => (
+                <li key={equipo.id_equipo}>{equipo.nombre}</li>
+              ))}
+            </ul>
+            <button className=" bg-red-500 p-2  text-white rounded-2xl" onClick={handleCloseModal}>
+              Cerrar
+            </button>
+          </div>
+
+        </div>
+      )}
     </div>
-    </div >
   );
 };
 
