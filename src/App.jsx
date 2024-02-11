@@ -76,7 +76,7 @@ function App() {
           path="/miembro/*"
           element={(verificarRol('Diseñador') || verificarRol('Analista') || verificarRol('Programador')) && (
             <div>
-              <SideBar />
+            <SideBar />
               <div className='flex '>
                 <div className="flex border-r-[#cccccc] border h-[84vh] w-[5.1vw] flex-col justify-start py-[1.5%] gap-[10%] items-center">
                   <img className='w-[50%]' src={proyectos} />
@@ -99,19 +99,10 @@ function App() {
         <Route
           path="/lider/*"
           element={verificarRol('Lider') && (
-
-
-
-
             <div>
-              <SideBar />
-              <div className='flex '>
-                <div className="flex border-r-[#cccccc] border h-[84vh] w-[5.1vw] flex-col justify-start py-[1.5%] gap-[10%] items-center">
-                  <img className='w-[50%]' src={proyectos} />
-                  <Link to="/">
-                    <img className='w-[100%]' src={cerrar} onClick={cerrarSesion} />
-                  </Link>
-                </div>
+            <SideBar />
+              <div className='flex  flex-row'>
+             
 
                 <Routes>
                   <Route path="proyectos" element={<Inicio />} />

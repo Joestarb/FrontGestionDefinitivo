@@ -115,27 +115,27 @@ const Recursos = () => {
   };
 
   return (
-    <div className="overflow-x-auto">
+    <div className=" ">
       <table className=" w-full">
         <thead>
           <tr>
-            <th className=" border-t-2 px-7 py-2">ID</th>
-            <th className=" border-t-2 px-7 py-2">Nombre</th>
-            <th className=" border-t-2 px-7 py-2">Tipo de Recurso</th>
-            <th className=" border-t-2 px-7 py-2">Funcionalidad</th>
-            <th className=" border-t-2 px-7 py-2">Proyecto</th>
-            <th className=" border-t-2 px-7 py-2">Acciones</th>
+            <th className="border-b-2 px-4 py-2 text-sm">#</th>
+            <th className="border-b-2 px-4 py-2 text-sm">Nombre</th>
+            <th className="border-b-2 px-4 py-2 text-sm">Tipo de Recurso</th>
+            <th className="border-b-2 px-4 py-2 text-sm">Funcionalidad</th>
+            <th className="border-b-2 px-4 py-2 text-sm">Proyecto</th>
+            <th className="border-b-2 px-4 py-2 text-sm">Acciones</th>
           </tr>
         </thead>
         <tbody>
           {recursosData.map(item => (
-            <tr className='  ' key={item.id_recurso}>
-              <td className=" border-t-2   pl-16 ">{item.id_recurso}</td>
-              <td className=" border-t-2   pl-16 ">{item.nombre}</td>
-              <td className=" border-t-2   pl-16 ">{item.tipo_recurso}</td>
-              <td className=" border-t-2   pl-24 ">{item.funcionalidad}</td>
-              <td className=" border-t-2   pl-16 ">{getNombreProyecto(item.fk_proyecto, proyectos)}</td>
-              <td className=" border-t-2  ">
+            <tr className='   text-center' key={item.id_recurso}>
+              <td className=" border-b-2 text-sm  ">{item.id_recurso}</td>
+              <td className=" border-b-2 text-sm  ">{item.nombre}</td>
+              <td className=" border-b-2 text-sm  ">{item.tipo_recurso}</td>
+              <td className=" border-b-2 text-sm  ">{item.funcionalidad}</td>
+              <td className=" border-b-2 text-sm  ">{getNombreProyecto(item.fk_proyecto, proyectos)}</td>
+              <td className=" border-b-2 text-sm   ">
                 <button onClick={() => handleEdit(item)} className="text-blue-500 text-3xl font-bold py-2 px-4 rounded">
                   <MdEdit />
                 </button>
