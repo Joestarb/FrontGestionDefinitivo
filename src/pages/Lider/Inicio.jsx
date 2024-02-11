@@ -4,18 +4,10 @@ import TareasLider from "./Tareas/TareasLider";
 import Recursos from "./Recursos/Recursos";
 
 const Inicio = () => {
-  const [mostrarProyectos, setMostrarProyectos] = useState(true);
+
   const [proyectoActivo, setProyectoActivo] = useState('miembros'); // Inicialmente, miembros está activo
 
-  const cambiarAProyecto = () => {
-    setMostrarProyectos(true);
-    setProyectoActivo('tareas');
-  };
 
-  const cambiarARecurso = () => {
-    setMostrarProyectos(false);
-    setProyectoActivo('recursos');
-  };
 
   return (
     <div>
