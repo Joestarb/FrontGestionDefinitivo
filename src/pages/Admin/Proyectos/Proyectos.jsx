@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
+import ProyectoForm from "./Components/ProyectoForm";
 
 const Proyectos = () => {
   const [proyectos, setProyectos] = useState([]); // Estado para almacenar los proyectos
   const [equiposPorProyecto, setEquiposPorProyecto] = useState({}); // Estado para almacenar los equipos por proyecto
   const [selectedProyectoId, setSelectedProyectoId] = useState(null); // Estado para almacenar el ID del proyecto seleccionado
-
+  const [agregarProyecto, setAgregarProyecto] = useState(false)
   // Función para cargar los proyectos desde el endpoint
   const fetchProyectos = async () => {
     try {
@@ -70,11 +71,13 @@ const Proyectos = () => {
     setSelectedProyectoId(null);
   };
 
+
+
   return (
     <div className="w-full ">
       <div className="flex justify-between mx-[1%] py-[.5%] ">
         <p className="text-4xl font-semibold">Proyecto</p>
-        <button className="bg-black rounded-md text-white px-2 py-1">
+        <button onClick={() => setAgregarProyecto(true)} className="bg-black rounded-md text-white px-2 py-1">
           + Agregar proyecto
         </button>
       </div>
@@ -91,11 +94,7 @@ const Proyectos = () => {
         </div>
 
         <section className="flex flex-row mt-4 items-center">
-          <p className="text-lg">Buscar:</p>
-          <input
-            type="search"
-            className="border-[#CCCCCC] border-2 mx-[1%] border-b-2-[#cccccc] mt-2 rounded-md text-sm"
-          />
+          
         </section>
         <div className="overflow-x-auto">
           <table className="table-auto w-full">
@@ -173,6 +172,12 @@ const Proyectos = () => {
           </div>
 
         </div>
+      )}
+
+      {agregarProyecto &&(
+      <ProyectoForm
+      setAgregarProyecto = {setAgregarProyecto}
+      />
       )}
     </div>
   );

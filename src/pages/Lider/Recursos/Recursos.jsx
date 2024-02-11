@@ -31,6 +31,7 @@ const Recursos = () => {
   };
 
   const handleSaveChanges = () => {
+    
     window.location.reload()
     fetch(`https://localhost:8080/recurso/${editedRecurso.id_recurso}`, {
       method: 'PUT',
@@ -42,7 +43,8 @@ const Recursos = () => {
       .then(response => {
         if (response.ok) {
           console.log("Cambios guardados exitosamente");
-          return response.json(); // Obtener los datos actualizados
+          return response.json(); // Obtener los datos 
+          
         } else {
           console.error('Error al guardar los cambios:', response.statusText);
           throw new Error('Error al guardar los cambios');
@@ -153,15 +155,15 @@ const Recursos = () => {
             <h2 className="text-xl font-bold mb-4">Editar Recurso</h2>
             <div className="mb-4">
               <label className="block text-sm font-bold mb-2" htmlFor="nombre">Nombre:</label>
-              <input type="text" id="nombre" className="border rounded-md px-4 py-2 w-full" value={editedRecurso.nombre} onChange={(e) => setEditedRecurso({ ...editedRecurso, nombre: e.target.value })} />
+              <input required type="text" id="nombre" className="border rounded-md px-4 py-2 w-full" value={editedRecurso.nombre} onChange={(e) => setEditedRecurso({ ...editedRecurso, nombre: e.target.value })} />
             </div>
             <div className="mb-4">
               <label className="block text-sm font-bold mb-2" htmlFor="tipo_recurso">Tipo de Recurso:</label>
-              <input type="text" id="tipo_recurso" className="border rounded-md px-4 py-2 w-full" value={editedRecurso.tipo_recurso} onChange={(e) => setEditedRecurso({ ...editedRecurso, tipo_recurso: e.target.value })} />
+              <input required type="text" id="tipo_recurso" className="border rounded-md px-4 py-2 w-full" value={editedRecurso.tipo_recurso} onChange={(e) => setEditedRecurso({ ...editedRecurso, tipo_recurso: e.target.value })} />
             </div>
             <div className="mb-4">
               <label className="block text-sm font-bold mb-2" htmlFor="funcionalidad">Funcionalidad:</label>
-              <input type="text" id="funcionalidad" className="border rounded-md px-4 py-2 w-full" value={editedRecurso.funcionalidad} onChange={(e) => setEditedRecurso({ ...editedRecurso, funcionalidad: e.target.value })} />
+              <input required type="text" id="funcionalidad" className="border rounded-md px-4 py-2 w-full" value={editedRecurso.funcionalidad} onChange={(e) => setEditedRecurso({ ...editedRecurso, funcionalidad: e.target.value })} />
             </div>
             <div className="mb-4">
               <label className="block text-sm font-bold mb-2" htmlFor="proyecto">Proyecto:</label>
