@@ -22,7 +22,7 @@ function App() {
   // Función para verificar el rol almacenado en localStorage
   const verificarRol = (rolAutorizado) => {
     const rolUsuario = sessionStorage.getItem('rol');
-  
+
     // Verificar si el rol del usuario coincide con el rol autorizado
     if (rolUsuario === rolAutorizado) {
       return true;
@@ -37,9 +37,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/*" element={<Error404 />} />
-        <Route path="/admin/*" element={<Error404 />} />
-        <Route path="/miembro/*" element={<Error404 />} />
-        <Route path="/lider/*" element={<Error404 />} />
+
         {/* Rutas para el rol de administrador */}
         <Route
           path="/admin/*"
@@ -66,7 +64,7 @@ function App() {
                   <Route path="recursos" element={<RecursosAdmin />} />
                 </Routes>
               </div>
-              
+
 
               <Footer />
             </div>
@@ -105,7 +103,7 @@ function App() {
 
 
 
-                        <div>
+            <div>
               <SideBar />
               <div className='flex '>
                 <div className="flex border-r-[#cccccc] border h-[84vh] w-[5.1vw] flex-col justify-start py-[1.5%] gap-[10%] items-center">
@@ -116,7 +114,7 @@ function App() {
                 </div>
 
                 <Routes>
-                <Route path="proyectos" element={<Inicio />} />
+                  <Route path="proyectos" element={<Inicio />} />
                 </Routes>
               </div>
 

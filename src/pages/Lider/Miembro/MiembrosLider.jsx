@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { MdDelete } from "react-icons/md";
-
-
-const Recursos = () => {
+const MiembrosLider = () => {
     const recursosDummyData = [
         { id_recurso: 1, nombre: "Recurso 1", tipo_recurso: "Tipo 1", funcionalidad: "Funcionalidad 1", fk_proyecto: 1 },
         { id_recurso: 2, nombre: "Recurso 2", tipo_recurso: "Tipo 2", funcionalidad: "Funcionalidad 2", fk_proyecto: 2 },
@@ -16,12 +14,12 @@ const Recursos = () => {
 
     return (
         <div className="overflow-x-auto">
-     
+  
             <table className="table-auto w-full">
                 <thead>
                     <tr>
                         <th className="px-7 py-2">ID</th>
-                        <th className="px-7 py-2">Insano</th>
+                        <th className="px-7 py-2">Nombre</th>
                         <th className="px-7 py-2">Tipo de Recurso</th>
                         <th className="px-7 py-2">Funcionalidad</th>
                         <th className="px-7 py-2">Proyecto</th>
@@ -49,4 +47,4 @@ const Recursos = () => {
     );
 };
 
-export default Recursos;
+export default MiembrosLider;

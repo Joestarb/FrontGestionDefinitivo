@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
-import ProyectosTabla from './Equipo/Components/ProyectosTabla';
-import Recursos from './Recursos/Recursos';
-import Navbar from '../../components/Navbar';
+import MiembrosLider from "./Miembro/MiembrosLider";
+import TareasLider from "./Tareas/TareasLider";
+import Recursos from "./Recursos/Recursos";
 
 const Inicio = () => {
   const [mostrarProyectos, setMostrarProyectos] = useState(true);
-  const [proyectoActivo, setProyectoActivo] = useState(true);
+  const [proyectoActivo, setProyectoActivo] = useState('miembros'); // Inicialmente, miembros está activo
 
   const cambiarAProyecto = () => {
     setMostrarProyectos(true);
-    setProyectoActivo(true);
+    setProyectoActivo('tareas');
   };
 
   const cambiarARecurso = () => {
     setMostrarProyectos(false);
-    setProyectoActivo(false);
+    setProyectoActivo('recursos');
   };
 
   return (
@@ -23,18 +23,21 @@ const Inicio = () => {
         <p className='text-4xl font-semibold'> Lider </p>
       </div>
 
-      <div className='mx-10'>
-        <div className='flex gap-4 text-2xl font-semibold border-b-2 border-black mt-12'>
-          <p onClick={cambiarAProyecto} style={{ cursor: 'pointer', color: proyectoActivo ? '#985be3' : 'inherit' }}>Proyecto</p>
-          <p onClick={cambiarARecurso} style={{ cursor: 'pointer', color: !proyectoActivo ? '#985be3' : 'inherit' }}>Recurso</p>
+      <div >
+        <div className='flex gap-4 text-2xl  w-screen font-semibold border-b-2 border-black mt-12'>
+          <button className={proyectoActivo === 'miembros' ? 'text-blue-500' : 'text-black' } onClick={() => setProyectoActivo('miembros')}>Miembro</button>
+          <button className={proyectoActivo === 'tareas' ? 'text-blue-500' : 'text-black'} onClick={() => setProyectoActivo('tareas')}>Tarea</button>
+          <button className={proyectoActivo === 'recursos' ? 'text-blue-500' : 'text-black'} onClick={() => setProyectoActivo('recursos')}>Recurso</button>
         </div>
-
+ 
         <section className='flex flex-row mt-4 items-center'>
           <p className='text-3xl'>Buscar:</p>
           <input type="search" className='border-2 h-7 border-gray-500 mt-2 rounded-md' />
         </section>
 
-        {mostrarProyectos ? <ProyectosTabla /> : <Recursos />}
+        {proyectoActivo === 'miembros' && <MiembrosLider />}
+        {proyectoActivo === 'tareas' && <TareasLider />}
+        {proyectoActivo === 'recursos' && <Recursos />}
       </div>
     </div>
   );
