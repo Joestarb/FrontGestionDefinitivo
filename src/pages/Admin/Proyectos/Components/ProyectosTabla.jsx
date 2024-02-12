@@ -10,23 +10,23 @@ const ProyectosTabla = ({ proyectos, getColorClass, handleOpenModal, fetchRecurs
         setRecursos(recursosData); // Actualizar el estado de recursos con los datos obtenidos
     };
     // Agrega la función handleBorrarProyecto
-const handleBorrarProyecto = async (proyectoId) => {
-    try {
-        const response = await fetch(`https://localhost:8080/proyecto/${proyectoId}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        });
-        if (response.ok) {
-            console.log(`Proyecto con ID ${proyectoId} eliminado correctamente.`);
-        } else {
-            console.error(`Error al borrar el proyecto con ID ${proyectoId}.`);
+    const handleBorrarProyecto = async (proyectoId) => {
+        try {
+            const response = await fetch(`https://localhost:8080/proyecto/${proyectoId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+            if (response.ok) {
+                console.log(`Proyecto con ID ${proyectoId} eliminado correctamente.`);
+            } else {
+                console.error(`Error al borrar el proyecto con ID ${proyectoId}.`);
+            }
+        } catch (error) {
+            console.error(`Error de red al intentar borrar el proyecto: ${error.message}`);
         }
-    } catch (error) {
-        console.error(`Error de red al intentar borrar el proyecto: ${error.message}`);
-    }
-};
+    };
     return (
         <div className="overflow-x-auto">
             {proyectos.length > 0 ? (
@@ -39,6 +39,9 @@ const handleBorrarProyecto = async (proyectoId) => {
                             <th className="border-b-2 px-4 py-2 text-sm">Equipos</th>
                             <th className="border-b-2 px-4 py-2 text-sm">
                                 Fecha de Inicio
+                            </th>
+                            <th className="border-b-2 px-4 py-2 text-sm">
+                                Fecha de finalizacion
                             </th>
                             <th className="border-b-2 px-4 py-2 text-sm">Estado</th>
                             <th className="border-b-2 px-4 py-2 text-sm">Recurso</th>
@@ -67,6 +70,9 @@ const handleBorrarProyecto = async (proyectoId) => {
                                 <td className="border-b-2 px-4 py-2 text-sm">
                                     {proyecto.fecha_inicio}
                                 </td>
+                                <td className="border-b-2 px-4 py-2 text-sm">
+                                    {proyecto.fecha_fin}
+                                </td>
                                 <td
                                     className={`border-b-2 px-4 py-2 text-sm ${getColorClass(
                                         proyecto.fk_estado
@@ -87,9 +93,9 @@ const handleBorrarProyecto = async (proyectoId) => {
                                 </td>
 
                                 <td className="border-b-2 px-4 py-2 text-sm">
-                                <button className=' text-red-500' onClick={() => handleBorrarProyecto(proyecto.id_proyecto)}>
-                                   <MdDelete/>
-                                </button>
+                                    <button className=' text-red-500' onClick={() => handleBorrarProyecto(proyecto.id_proyecto)}>
+                                        <MdDelete />
+                                    </button>
                                 </td>
 
                             </tr>

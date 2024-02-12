@@ -80,7 +80,7 @@ function ProyectoForm({setAgregarProyecto}) {
             if (!response.ok) {
                 throw new Error('Error al enviar los datos');
             }
-
+            setAgregarProyecto(false)
             console.log('Datos enviados exitosamente');
             // Aquí podrías hacer algo más después de enviar los datos, como limpiar el formulario o mostrar un mensaje de éxito.
         } catch (error) {
@@ -158,7 +158,7 @@ function ProyectoForm({setAgregarProyecto}) {
                         ))}
                     </select>
                 </label>
-                <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <button  type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Enviar
                 </button>
                 <button onClick={()=> setAgregarProyecto(false)} type="submit" className="bg-red-500 ml-3 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
