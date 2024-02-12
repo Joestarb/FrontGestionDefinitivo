@@ -43,6 +43,7 @@ const Equipos = () => {
       .then(response => response.json())
       .then(data => {
         console.log('Equipo agregado exitosamente:', data);
+        window.location.reload()
         setEquipos([...equipos, data]);
         setNuevoEquipo({
           nombre: '',
@@ -72,10 +73,33 @@ const Equipos = () => {
 
   return (
     <div className="w-full">
+      <div className=' flex justify-between mt-2 m-2'>
+        <h2 className="text-4xl font-semibold mb-2">Equipos</h2>
+        <button onClick={() => setMostrarModal(true)} className="bg-black text-white px-4 py-2 ml-2 rounded-md">Agregar Equipo</button>
+      </div>
       <div className="mx-10">
+
+
+        <div className="flex text-lg font-semibold border-b-2 border-[#cccccc] mt-12">
+          <div className="flex justify-around w-[35%] my-[.5%]">
+            <Link to={'/admin/proyectos'}>
+              <button className=" ">
+                Proyecto
+              </button>
+            </Link>
+
+            <Link to={'/admin/equipos'}>
+              <button className=' border-[#2E0364] border-b-2px-2 text-[#2E0364] '>Equipo</button>
+            </Link>
+
+            <Link to={'/admin/recursos'}>
+              <button>Recurso</button>
+            </Link>
+
+          </div>
+        </div>
+
         <div className="mt-6">
-          <h2 className="text-2xl font-semibold mb-2">Agregar Equipo</h2>
-          <button onClick={() => setMostrarModal(true)} className="bg-blue-500 text-white px-4 py-2 ml-2 rounded-md">Agregar Equipo</button>
 
 
           {mostrarModal && (
@@ -89,7 +113,6 @@ const Equipos = () => {
         </div>
 
         <div className="mt-6">
-          <h2 className="text-2xl font-semibold mb-2">Equipos</h2>
           {equipos.length > 0 ? (
             <>
               <EquiposTabla

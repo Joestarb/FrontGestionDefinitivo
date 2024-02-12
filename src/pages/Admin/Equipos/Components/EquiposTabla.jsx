@@ -71,19 +71,19 @@ const EquiposTabla = ({ equipos, handleDeleteEquipo }) => {
             <table className="w-full">
                 <thead>
                     <tr>
-                        <th className="border border-gray-400 px-4 py-2">ID Equipo</th>
-                        <th className="border border-gray-400 px-4 py-2">Nombre</th>
-                        <th className="border border-gray-400 px-4 py-2">Nombre Proyecto</th>
-                        <th className="border border-gray-400 px-4 py-2">Acciones</th>
+                        <th className="border-b-2 px-4 py-2 text-sm">#</th>
+                        <th className="border-b-2 px-4 py-2 text-sm">Nombre</th>
+                        <th className="border-b-2 px-4 py-2 text-sm">Nombre Proyecto</th>
+                        <th className="border-b-2 px-4 py-2 text-sm">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     {equipos.map((equipo, index) => (
                         <tr key={equipo.id_equipo}>
-                            <td className="border border-gray-400 px-4 py-2">{equipo.id_equipo}</td>
-                            <td className="border border-gray-400 px-4 py-2">{equipo.nombre}</td>
-                            <td className="border border-gray-400 px-4 py-2">{getNombreProyecto(equipo)}</td>
-                            <td className="border border-gray-400 px-4 py-2">
+                            <td className="border-b-2  pl-20 py-2 text-sm">{equipo.id_equipo}</td>
+                            <td className="border-b-2  pl-20 py-2 text-sm">{equipo.nombre}</td>
+                            <td className="border-b-2  pl-20 py-2 text-sm">{getNombreProyecto(equipo)}</td>
+                            <td className="border-b-2  pl-20 py-2 text-sm">
                                 <button onClick={() => handleDeleteEquipo(equipo.id_equipo)} className="bg-red-500 text-white px-2 py-1 rounded-md">Eliminar</button>
                                 <button onClick={() => openEditModal(equipo)} className="bg-blue-500 text-white px-2 py-1 rounded-md ml-2">Editar</button>
                             </td>

@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import ModalRecursos from './Components/ModalRecursos';
+import RecursosTabla from './Components/RecursosTabla';
+import AnadirRecurso from './Components/AnadirRecurso';
 
 const RecursosAdmin = () => {
+  const [showModal, setShowModal] = useState(false);
   const [recursos, setRecursos] = useState([]);
   const [nombreRecurso, setNombreRecurso] = useState('');
   const [tipoRecurso, setTipoRecurso] = useState('');
@@ -13,6 +17,9 @@ const RecursosAdmin = () => {
   const [editedFuncionalidadRecurso, setEditedFuncionalidadRecurso] = useState('');
   const [editedProyectoId, setEditedProyectoId] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleCloseModal = () => setShowModal(false);
+  const handleShowModal = () => setShowModal(true);
 
   useEffect(() => {
     const fetchRecursos = async () => {
@@ -49,6 +56,7 @@ const RecursosAdmin = () => {
       setTipoRecurso('');
       setFuncionalidadRecurso('');
       setProyectoId('');
+      handleCloseModal()
     } catch (error) {
       console.error('Error creating recurso:', error);
     }
@@ -115,133 +123,45 @@ const RecursosAdmin = () => {
 
       <div className="mx-10">
         <section className="mt-6">
-          <form onSubmit={handleSubmit}>
-            <input
-              type="text"
-              name="nombre"
-              placeholder="Nombre del recurso"
-              value={nombreRecurso}
-              onChange={handleInputChange}
-              className="border-[#CCCCCC] border-2 mx-[1%] border-b-2-[#cccccc] mt-2 rounded-md text-sm px-2 py-1"
-            />
-            <input
-              type="text"
-              name="tipo"
-              placeholder="Tipo de recurso"
-              value={tipoRecurso}
-              onChange={handleInputChange}
-              className="border-[#CCCCCC] border-2 mx-[1%] border-b-2-[#cccccc] mt-2 rounded-md text-sm px-2 py-1"
-            />
-            <input
-              type="text"
-              name="funcionalidad"
-              placeholder="Funcionalidad del recurso"
-              value={funcionalidadRecurso}
-              onChange={handleInputChange}
-              className="border-[#CCCCCC] border-2 mx-[1%] border-b-2-[#cccccc] mt-2 rounded-md text-sm px-2 py-1"
-            />
-            <input
-              type="text"
-              name="proyectoId"
-              placeholder="ID del proyecto asociado"
-              value={proyectoId}
-              onChange={handleInputChange}
-              className="border-[#CCCCCC] border-2 mx-[1%] border-b-2-[#cccccc] mt-2 rounded-md text-sm px-2 py-1"
-            />
-            <button type="submit" className="bg-black text-white px-2 py-1 rounded-md ml-2">
-              Agregar recurso
-            </button>
-          </form>
+          <button onClick={handleShowModal}>Mostrar Modal</button>
+          <AnadirRecurso
+            isOpen={showModal}
+            onClose={handleCloseModal}
+            handleSubmit={handleSubmit}
+            handleInputChange={handleInputChange}
+            nombreRecurso={nombreRecurso}
+            tipoRecurso={tipoRecurso}
+            funcionalidadRecurso={funcionalidadRecurso}
+            proyectoId={proyectoId}
+            handleCloseModal={handleCloseModal}
+
+          />
         </section>
 
         <div className="overflow-x-auto mt-6">
-          <table className="table-auto w-full">
-            <thead>
-              <tr>
-                <th className="border-b-2 px-4 py-2 text-sm">ID</th>
-                <th className="border-b-2 px-4 py-2 text-sm">Nombre</th>
-                <th className="border-b-2 px-4 py-2 text-sm">Tipo</th>
-                <th className="border-b-2 px-4 py-2 text-sm">Funcionalidad</th>
-                <th className="border-b-2 px-4 py-2 text-sm">ID Proyecto</th>
-                <th className="border-b-2 px-4 py-2 text-sm">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recursos.map((recurso) => (
-                <tr key={recurso.id_recurso} className="text-center">
-                  <td className="border-b-2 px-4 py-2 text-sm">{recurso.id_recurso}</td>
-                  <td className="border-b-2 px-4 py-2 text-sm">{recurso.nombre}</td>
-                  <td className="border-b-2 px-4 py-2 text-sm">{recurso.tipo_recurso}</td>
-                  <td className="border-b-2 px-4 py-2 text-sm">{recurso.funcionalidad}</td>
-                  <td className="border-b-2 px-4 py-2 text-sm">{recurso.fk_proyecto}</td>
-                  <td className="border-b-2 px-4 py-2 text-sm">
-                    <button onClick={() => handleDelete(recurso.id_recurso)} className="bg-red-500 text-white px-2 py-1 rounded-md">
-                      Eliminar
-                    </button>
-                    <button onClick={() => handleEdit(recurso.id_recurso, recurso.nombre, recurso.tipo_recurso, recurso.funcionalidad, recurso.fk_proyecto)} className="bg-blue-500 text-white px-2 py-1 rounded-md ml-2">
-                      Editar
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          {recursos.length > 0 ?
+            (<>
+              <RecursosTabla
+                recursos={recursos}
+                handleDelete={handleDelete}
+                handleEdit={handleEdit}
+              />
+            </>)
+            : (<p>No hay recursos añade alguno</p>)}
+
         </div>
       </div>
       {isModalOpen && (
-        <div className="fixed z-10 inset-0 overflow-y-auto">
-          <div className="flex items-center justify-center min-h-screen">
-            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
-
-            <div className="relative bg-white rounded-lg w-96 p-6">
-              <div className="absolute top-0 right-0">
-                <button onClick={() => setIsModalOpen(false)} className="text-gray-500 hover:text-gray-700">
-                  <svg
-                    className="h-6 w-6"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-
-              <h2 className="text-xl font-semibold mb-4">Editar Recurso</h2>
-
-              <input
-                type="text"
-                value={editedNombreRecurso}
-                onChange={(e) => setEditedNombreRecurso(e.target.value)}
-                className="border-[#CCCCCC] border-2 mx-[1%] border-b-2-[#cccccc] mt-2 rounded-md text-sm px-2 py-1"
-              />
-
-              <input
-                type="text"
-                value={editedTipoRecurso}
-                onChange={(e) => setEditedTipoRecurso(e.target.value)}
-                className="border-[#CCCCCC] border-2 mx-[1%] border-b-2-[#cccccc] mt-2 rounded-md text-sm px-2 py-1"
-              />
-
-              <input
-                type="text"
-                value={editedFuncionalidadRecurso}
-                onChange={(e) => setEditedFuncionalidadRecurso(e.target.value)}
-                className="border-[#CCCCCC] border-2 mx-[1%] border-b-2-[#cccccc] mt-2 rounded-md text-sm px-2 py-1"
-              />
-
-              <input
-                type="text"
-                value={editedProyectoId}
-                onChange={(e) => setEditedProyectoId(e.target.value)}
-                className="border-[#CCCCCC] border-2 mx-[1%] border-b-2-[#cccccc] mt-2 rounded-md text-sm px-2 py-1"
-              />
-
-              <button onClick={handleSave} className="bg-blue-500 text-white px-2 py-1 rounded-md mt-4">Guardar</button>
-            </div>
-          </div>
-        </div>
+        <ModalRecursos
+          editedNombreRecurso={editedNombreRecurso}
+          editedTipoRecurso={editedTipoRecurso}
+          editedFuncionalidadRecurso={editedFuncionalidadRecurso}
+          editedProyectoId={editedProyectoId}
+          handleSave={handleSave}
+          setEditedNombreRecurso={setEditedNombreRecurso}
+          setIsModalOpen ={setIsModalOpen }
+          
+        />
       )}
     </div>
   );
