@@ -8,10 +8,15 @@ import cerrar from './assets/Sidebar/cerrar.svg';
 import proyectos from './assets/Sidebar/proyectos.svg';
 import Tareas from "./pages/Miembro/Tareas/Tareas";
 import SideBarLider from "./components/Lider/SidebarLider";
-import Inicio from './pages/Lider/Inicio';
+import Inicio from './pages/Lider/InicioMiembro';
 import Equipos from './pages/Admin/Equipos/Equipos';
 import RecursosAdmin from './pages/Admin/Recursos/Recursos';
 import Error404 from './pages/Erro404'
+import MiembrosLider from './pages/Lider/Miembro/MiembrosLider';
+import Recursos from './pages/Lider/Recursos/Recursos';
+import InicioMiembro from './pages/Lider/InicioMiembro';
+import InicioRecurso from './pages/Lider/InicioRecurso';
+import InicioTareas from './pages/Lider/InicioTareas';
 
 function App() {
   const cerrarSesion = () => {
@@ -76,7 +81,7 @@ function App() {
           path="/miembro/*"
           element={(verificarRol('Diseñador') || verificarRol('Analista') || verificarRol('Programador')) && (
             <div>
-            <SideBar />
+              <SideBar />
               <div className='flex '>
                 <div className="flex border-r-[#cccccc] border h-[84vh] w-[5.1vw] flex-col justify-start py-[1.5%] gap-[10%] items-center">
                   <img className='w-[50%]' src={proyectos} />
@@ -100,12 +105,17 @@ function App() {
           path="/lider/*"
           element={verificarRol('Lider') && (
             <div>
-            <SideBar />
+              <SideBar />
               <div className='flex  flex-row'>
-             
+
 
                 <Routes>
-                  <Route path="proyectos" element={<Inicio />} />
+                  <Route path="miembros" element={<InicioMiembro />} />
+                  <Route path="recursos" element={<InicioRecurso />} />
+                  <Route path="tareas" element={<InicioTareas />} />
+            
+
+
                 </Routes>
               </div>
 
