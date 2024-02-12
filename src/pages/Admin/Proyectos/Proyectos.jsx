@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import EquiposPorProyecto from "./Components/EquiposPorProyecto";
 import ProyectoForm from "./Components/ProyectoForm";
 import ProyectosTabla from "./Components/ProyectosTabla";
-import EquiposPorProyecto from "./Components/EquiposPorProyecto";
-
 const Proyectos = () => {
   const [proyectos, setProyectos] = useState([]); // Estado para almacenar los proyectos
   const [equiposPorProyecto, setEquiposPorProyecto] = useState({}); // Estado para almacenar los equipos por proyecto
@@ -112,11 +112,20 @@ const Proyectos = () => {
       <div className="mx-10">
         <div className="flex text-lg font-semibold border-b-2 border-[#cccccc] mt-12">
           <div className="flex justify-around w-[35%] my-[.5%]">
-            <p className="border-b-2 border-[#2E0364] px-2 text-[#2E0364]">
+            <Link  to={'/admin/proyectos'}>
+            <button className="border-b-2 border-[#2E0364] px-2 text-[#2E0364]">
               Proyecto
-            </p>
-            <p>Equipo</p>
-            <p>Recurso</p>
+            </button>
+            </Link>
+
+            <Link to={'/admin/equipos'}>
+            <button>Equipo</button>
+            </Link>
+
+            <Link to={'/admin/recursos'}>
+            <button>Recurso</button>
+            </Link>
+
           </div>
         </div>
 
