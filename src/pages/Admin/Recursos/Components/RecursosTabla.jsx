@@ -5,7 +5,7 @@ const RecursosTabla = ({recursos, handleDelete, handleEdit   }) => {
         <table className="table-auto w-full">
             <thead>
                 <tr>
-                    <th className="border-b-2 px-4 py-2 text-sm">ID</th>
+                    <th className="border-b-2 px-4 py-2 text-sm">#</th>
                     <th className="border-b-2 px-4 py-2 text-sm">Nombre</th>
                     <th className="border-b-2 px-4 py-2 text-sm">Tipo</th>
                     <th className="border-b-2 px-4 py-2 text-sm">Funcionalidad</th>

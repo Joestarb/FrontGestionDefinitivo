@@ -3,6 +3,7 @@ import axios from 'axios';
 import ModalRecursos from './Components/ModalRecursos';
 import RecursosTabla from './Components/RecursosTabla';
 import AnadirRecurso from './Components/AnadirRecurso';
+import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 const RecursosAdmin = () => {
   const [showModal, setShowModal] = useState(false);
@@ -159,11 +160,32 @@ const RecursosAdmin = () => {
     <div className="w-full">
       <div className="flex justify-between mx-[1%] py-[.5%]">
         <p className="text-4xl font-semibold">Recursos</p>
+        <button className=' bg-blue-500  px-2 py-2 text-white rounded-xl' onClick={handleShowModal}>Mostrar Modal</button>
+      </div>
+      
+      <div className=' mx-10'>
+        <div className="flex text-lg font-semibold border-b-2 border-[#cccccc] mt-12">
+          <div className="flex justify-around w-[35%] my-[.5%]">
+            <Link to={'/admin/proyectos'}>
+              <button className=" ">
+                Proyecto
+              </button>
+            </Link>
+
+            <Link to={'/admin/equipos'}>
+              <button className=' border-[#2E0364] border-b-2px-2 text-[#2E0364] '>Equipo</button>
+            </Link>
+
+            <Link to={'/admin/recursos'}>
+              <button>Recurso</button>
+            </Link>
+
+          </div>
+        </div>
       </div>
 
       <div className="mx-10">
         <section className="mt-6">
-          <button onClick={handleShowModal}>Mostrar Modal</button>
           <AnadirRecurso
             isOpen={showModal}
             onClose={handleCloseModal}
