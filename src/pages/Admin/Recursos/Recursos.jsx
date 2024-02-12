@@ -3,7 +3,7 @@ import axios from 'axios';
 import ModalRecursos from './Components/ModalRecursos';
 import RecursosTabla from './Components/RecursosTabla';
 import AnadirRecurso from './Components/AnadirRecurso';
-
+import Swal from 'sweetalert2';
 const RecursosAdmin = () => {
   const [showModal, setShowModal] = useState(false);
   const [recursos, setRecursos] = useState([]);
@@ -64,12 +64,38 @@ const RecursosAdmin = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`https://localhost:8080/recurso/${id}`);
-      setRecursos(recursos.filter(recurso => recurso.id_recurso !== id));
+      // Mostrar confirmación antes de eliminar
+      const result = await Swal.fire({
+        title: '¿Estás seguro?',
+        text: 'No podrás revertir esto.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminarlo'
+      });
+      if (result.isConfirmed) {
+        await axios.delete(`https://localhost:8080/recurso/${id}`);
+        // Actualizar la lista de recursos después de eliminar
+        setRecursos(recursos.filter(recurso => recurso.id_recurso !== id));
+        // Mostrar notificación de éxito
+        Swal.fire(
+          '¡Eliminado!',
+          'El recurso ha sido eliminado.',
+          'success'
+        );
+      }
     } catch (error) {
       console.error('Error deleting recurso:', error);
+      // Mostrar notificación de error
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Hubo un error al eliminar el recurso. Por favor, intenta de nuevo más tarde.'
+      });
     }
   };
+
 
   const handleEdit = (id, nombre, tipo, funcionalidad, proyectoId) => {
     setEditItemId(id);
@@ -110,10 +136,24 @@ const RecursosAdmin = () => {
       setEditedFuncionalidadRecurso('');
       setEditedProyectoId('');
       setIsModalOpen(false);
+
+      // Mostrar notificación de éxito
+      Swal.fire({
+        icon: 'success',
+        title: '¡Actualizado!',
+        text: 'El recurso ha sido actualizado exitosamente.'
+      });
     } catch (error) {
       console.error('Error updating recurso:', error);
+      // Mostrar notificación de error
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Hubo un error al actualizar el recurso. Por favor, intenta de nuevo más tarde.'
+      });
     }
   };
+
 
   return (
     <div className="w-full">
@@ -134,7 +174,6 @@ const RecursosAdmin = () => {
             funcionalidadRecurso={funcionalidadRecurso}
             proyectoId={proyectoId}
             handleCloseModal={handleCloseModal}
-
           />
         </section>
 
@@ -159,8 +198,10 @@ const RecursosAdmin = () => {
           editedProyectoId={editedProyectoId}
           handleSave={handleSave}
           setEditedNombreRecurso={setEditedNombreRecurso}
-          setIsModalOpen ={setIsModalOpen }
-          
+          setIsModalOpen={setIsModalOpen}
+          setEditedProyectoId={setEditedProyectoId}
+
+
         />
       )}
     </div>

@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ModalRecursos = ({editedNombreRecurso, editedTipoRecurso, editedFuncionalidadRecurso, editedProyectoId, handleSave, setEditedNombreRecurso, setIsModalOpen     }) => {
+const ModalRecursos = ({editedNombreRecurso, editedTipoRecurso, editedFuncionalidadRecurso, editedProyectoId, handleSave, setEditedNombreRecurso, setIsModalOpen, setEditedProyectoId      }) => {
     return (
         <div className="fixed z-10 inset-0 overflow-y-auto">
             <div className="flex items-center justify-center min-h-screen">

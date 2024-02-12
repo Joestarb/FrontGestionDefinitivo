@@ -108,6 +108,7 @@ const Equipos = () => {
               handleInputChange={handleInputChange}
               proyectos={proyectos}
               handleAgregarEquipo={handleAgregarEquipo}
+              setMostrarModal = {setMostrarModal }
             />
           )}
         </div>
