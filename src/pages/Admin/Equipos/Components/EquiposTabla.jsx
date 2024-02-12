@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const EquiposTabla = ({ equipos, handleDeleteEquipo }) => {
+const EquiposTabla = ({ equipos, handleDeleteEquipo, }) => {
     const [modalOpen, setModalOpen] = useState(false);
     const [equipoSeleccionado, setEquipoSeleccionado] = useState(null);
     const [nombreEquipoEditado, setNombreEquipoEditado] = useState('');
@@ -29,22 +29,22 @@ const EquiposTabla = ({ equipos, handleDeleteEquipo }) => {
                 fk_proyecto: nombreProyectoEditado
             })
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error al editar el equipo');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Equipo editado:', data);
-            closeEditModal();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al editar el equipo');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Equipo editado:', data);
+                closeEditModal();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
     };
     useEffect(() => {
-        const fetchProyecto = () => {""}
+        const fetchProyecto = () => { "" }
         // Fetch de proyectos al cargar el componente
         fetch('https://localhost:8080/proyecto')
             .then(response => {
@@ -61,7 +61,10 @@ const EquiposTabla = ({ equipos, handleDeleteEquipo }) => {
                 // Manejar errores
             });
     }, []); // Este efecto se ejecutará solo una vez al montar el componente
-
+    const getNombreProyecto = (equipo) => {
+        const proyectoAsociado = proyectos.find(proyecto => proyecto.id_proyecto === equipo.fk_proyecto);
+        return proyectoAsociado ? proyectoAsociado.nombre : 'Proyecto no encontrado';
+    };
 
     return (
         <div>
@@ -76,10 +79,10 @@ const EquiposTabla = ({ equipos, handleDeleteEquipo }) => {
                 </thead>
                 <tbody>
                     {equipos.map((equipo, index) => (
-                        <tr key={index}>
+                        <tr key={equipo.id_equipo}>
                             <td className="border border-gray-400 px-4 py-2">{equipo.id_equipo}</td>
                             <td className="border border-gray-400 px-4 py-2">{equipo.nombre}</td>
-                            <td className="border border-gray-400 px-4 py-2">{equipo.fk_proyecto}</td>
+                            <td className="border border-gray-400 px-4 py-2">{getNombreProyecto(equipo)}</td>
                             <td className="border border-gray-400 px-4 py-2">
                                 <button onClick={() => handleDeleteEquipo(equipo.id_equipo)} className="bg-red-500 text-white px-2 py-1 rounded-md">Eliminar</button>
                                 <button onClick={() => openEditModal(equipo)} className="bg-blue-500 text-white px-2 py-1 rounded-md ml-2">Editar</button>
@@ -105,6 +108,7 @@ const EquiposTabla = ({ equipos, handleDeleteEquipo }) => {
                                         <h3 className="text-lg leading-6 font-medium text-gray-900">Editar Equipo</h3>
                                         <div className="mt-2">
                                             <input type="text" value={nombreEquipoEditado} onChange={(e) => setNombreEquipoEditado(e.target.value)} className="w-full border-gray-400 border rounded-md px-3 py-2" />
+                                            
                                             <input type="text" value={nombreProyectoEditado} onChange={(e) => setNombreProyectoEditado(e.target.value)} className="w-full border-gray-400 border rounded-md px-3 py-2 mt-2" />
                                         </div>
                                     </div>
