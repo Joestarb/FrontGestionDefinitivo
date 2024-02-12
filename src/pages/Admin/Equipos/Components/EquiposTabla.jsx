@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
 
-const EquiposTabla = ({ equipos, handleDeleteEquipo, }) => {
+const EquiposTabla = ({ equipos, handleDeleteEquipo }) => {
+    const [proyectoSeleccionadoId, setProyectoSeleccionadoId] = useState('');
     const [modalOpen, setModalOpen] = useState(false);
     const [equipoSeleccionado, setEquipoSeleccionado] = useState(null);
     const [nombreEquipoEditado, setNombreEquipoEditado] = useState('');
-    const [nombreProyectoEditado, setNombreProyectoEditado] = useState('');
     const [proyectos, setProyectos] = useState([]);
+    
+
     const openEditModal = (equipo) => {
         setEquipoSeleccionado(equipo);
         setNombreEquipoEditado(equipo.nombre);
-        setNombreProyectoEditado(equipo.fk_proyecto);
+        setProyectoSeleccionadoId(equipo.fk_proyecto); // Guarda el ID del proyecto seleccionado
         setModalOpen(true);
     };
-
+    
     const closeEditModal = () => {
         setModalOpen(false);
     };
@@ -26,7 +28,7 @@ const EquiposTabla = ({ equipos, handleDeleteEquipo, }) => {
             },
             body: JSON.stringify({
                 nombre: nombreEquipoEditado,
-                fk_proyecto: nombreProyectoEditado
+                fk_proyecto: proyectoSeleccionadoId // Usamos el ID del proyecto seleccionado
             })
         })
             .then(response => {
@@ -43,9 +45,8 @@ const EquiposTabla = ({ equipos, handleDeleteEquipo, }) => {
                 console.error('Error:', error);
             });
     };
+
     useEffect(() => {
-        const fetchProyecto = () => { "" }
-        // Fetch de proyectos al cargar el componente
         fetch('https://localhost:8080/proyecto')
             .then(response => {
                 if (!response.ok) {
@@ -58,14 +59,13 @@ const EquiposTabla = ({ equipos, handleDeleteEquipo, }) => {
             })
             .catch(error => {
                 console.error('Error:', error);
-                // Manejar errores
             });
-    }, []); // Este efecto se ejecutará solo una vez al montar el componente
+    }, []);
+
     const getNombreProyecto = (equipo) => {
         const proyectoAsociado = proyectos.find(proyecto => proyecto.id_proyecto === equipo.fk_proyecto);
         return proyectoAsociado ? proyectoAsociado.nombre : 'Proyecto no encontrado';
     };
-
     return (
         <div>
             <table className="w-full">
@@ -108,8 +108,16 @@ const EquiposTabla = ({ equipos, handleDeleteEquipo, }) => {
                                         <h3 className="text-lg leading-6 font-medium text-gray-900">Editar Equipo</h3>
                                         <div className="mt-2">
                                             <input type="text" value={nombreEquipoEditado} onChange={(e) => setNombreEquipoEditado(e.target.value)} className="w-full border-gray-400 border rounded-md px-3 py-2" />
-                                            
-                                            <input type="text" value={nombreProyectoEditado} onChange={(e) => setNombreProyectoEditado(e.target.value)} className="w-full border-gray-400 border rounded-md px-3 py-2 mt-2" />
+                                            <select
+                                                value={proyectoSeleccionadoId}
+                                                onChange={(e) => setProyectoSeleccionadoId(e.target.value)}
+                                                className="w-full border-gray-400 border rounded-md px-3 py-2 mt-2"
+                                            >
+                                                <option value="">Seleccionar Proyecto</option>
+                                                {proyectos.map(proyecto => (
+                                                    <option key={proyecto.id_proyecto} value={proyecto.id_proyecto}>{proyecto.nombre}</option>
+                                                ))}
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
