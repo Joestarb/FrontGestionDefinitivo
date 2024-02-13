@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Pie, Bar } from 'react-chartjs-2';
+import Chart from 'chart.js/auto';
 
 export default function GraficasRecursos() {
   const [recursos, setRecursos] = useState([]);
   const [recursosDisponibles, setRecursosDisponibles] = useState([]);
   const [recursosUsados, setRecursosUsados] = useState([]);
   const [recursosPendientes, setRecursosPendientes] = useState([]);
-  const [contadorRecursos, setContadorRecursos] = useState(0);
 
   useEffect(() => {
     const fetchRecursos = async () => {
@@ -23,101 +23,42 @@ export default function GraficasRecursos() {
   }, []);
 
   useEffect(() => {
-    const fetchContadorRecursos = async () => {
-      try {
-        const response = await axios.get('https://localhost:8080/proyecto/1/contadorRecursos'); 
-        setContadorRecursos(response.data.contadorRecursos);
-      } catch (error) {
-        console.error('Error fetching contador de recursos:', error);
-      }
-    };
-
-    fetchContadorRecursos();
-  }, []);
-
-  useEffect(() => {
-   
-    const disponibles = recursos.map(recurso => recurso.disponibilidad);
-    const usados = recursos.map(recurso => recurso.usados);
-    const pendientes = recursos.map(recurso => recurso.pendientes);
+  
+    const disponibles = recursos.filter(recurso => recurso.estado === 'Disponible');
+    const usados = recursos.filter(recurso => recurso.estado === 'En uso');
+    const pendientes = recursos.filter(recurso => recurso.estado === 'Pendiente');
     
     setRecursosDisponibles(disponibles);
     setRecursosUsados(usados);
     setRecursosPendientes(pendientes);
   }, [recursos]);
 
-  // Asignar un valor a cada recurso
-  useEffect(() => {
-    if (contadorRecursos > 0) {
-      const valorPorRecurso = 100 / contadorRecursos;
-
-      const nuevosRecursosDisponibles = new Array(contadorRecursos).fill(valorPorRecurso);
-      const nuevosRecursosUsados = new Array(contadorRecursos).fill(valorPorRecurso / 2); // Valores de ejemplo
-      const nuevosRecursosPendientes = new Array(contadorRecursos).fill(valorPorRecurso / 2); // Valores de ejemplo
-
-      setRecursosDisponibles(nuevosRecursosDisponibles);
-      setRecursosUsados(nuevosRecursosUsados);
-      setRecursosPendientes(nuevosRecursosPendientes);
-    }
-  }, [contadorRecursos]);
-
-
-  const dataPastel = {
-    labels: recursos.map(recurso => recurso.nombre),
-    datasets: [
-      {
-        data: recursosDisponibles,
-        backgroundColor: ['#36A2EB', '#FFCE56', '#FF6384', '#4BC0C0', '#9966FF', '#FF9F40'],
-        hoverBackgroundColor: ['#36A2EB', '#FFCE56', '#FF6384', '#4BC0C0', '#9966FF', '#FF9F40']
-      }
-    ]
-  };
-
-
-  const dataBarrasUsados = {
-    labels: recursos.map(recurso => recurso.nombre),
-    datasets: [
-      {
-        label: 'Recursos Usados',
-        backgroundColor: '#36A2EB',
-        borderColor: 'rgba(255,99,132,1)',
-        borderWidth: 1,
-        hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-        hoverBorderColor: 'rgba(255,99,132,1)',
-        data: recursosUsados
-      }
-    ]
-  };
-
- 
-  const dataBarrasPendientes = {
-    labels: recursos.map(recurso => recurso.nombre),
-    datasets: [
-      {
-        label: 'Recursos Pendientes',
-        backgroundColor: '#FF6384',
-        borderColor: 'rgba(255,99,132,1)',
-        borderWidth: 1,
-        hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-        hoverBorderColor: 'rgba(255,99,132,1)',
-        data: recursosPendientes
-      }
-    ]
+  const generarDatosGrafica = (recursos) => {
+    return {
+      labels: recursos.map(recurso => recurso.nombre),
+      datasets: [
+        {
+          data: recursos.map(recurso => recurso.cantidad),
+          backgroundColor: ['#36A2EB', '#FFCE56', '#FF6384', '#4BC0C0', '#9966FF', '#FF9F40'],
+          hoverBackgroundColor: ['#36A2EB', '#FFCE56', '#FF6384', '#4BC0C0', '#9966FF', '#FF9F40']
+        }
+      ]
+    };
   };
 
   return (
     <div>
       <div>
         <h2>Recursos Disponibles</h2>
-        <Pie data={dataPastel} />
+        {recursosDisponibles.length > 0 && <Pie data={generarDatosGrafica(recursosDisponibles)} />}
       </div>
       <div>
         <h2>Recursos Usados</h2>
-        <Bar data={dataBarrasUsados} />
+        {recursosUsados.length > 0 && <Bar data={generarDatosGrafica(recursosUsados)} />}
       </div>
       <div>
         <h2>Recursos Pendientes</h2>
-        <Bar data={dataBarrasPendientes} />
+        {recursosPendientes.length > 0 && <Bar data={generarDatosGrafica(recursosPendientes)} />}
       </div>
     </div>
   );
