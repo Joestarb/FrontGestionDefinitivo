@@ -11,7 +11,9 @@ import SideBarLider from "./components/Lider/SidebarLider";
 import Inicio from './pages/Lider/Inicio';
 import Equipos from './pages/Admin/Equipos/Equipos';
 import RecursosAdmin from './pages/Admin/Recursos/Recursos';
+import GraficasRecursos from './pages/Admin/Recursos/graficasRecursos';
 import Error404 from './pages/Erro404'
+import Navbar from './components/Navbar';
 
 function App() {
   const cerrarSesion = () => {
@@ -36,11 +38,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/*" element={<Error404 />} />
-        <Route path="/admin/*" element={<Error404 />} />
-        <Route path="/miembro/*" element={<Error404 />} />
-        <Route path="/lider/*" element={<Error404 />} />
-        {/* Rutas para el rol de administrador */}
+       
         <Route
           path="/admin/*"
           element={verificarRol('Administrador') && (
@@ -64,6 +62,9 @@ function App() {
 
                 <Routes>
                   <Route path="recursos" element={<RecursosAdmin />} />
+                </Routes>
+                <Routes>
+                  <Route path="graficaRecursos" element={<GraficasRecursos />} />
                 </Routes>
               </div>
               
