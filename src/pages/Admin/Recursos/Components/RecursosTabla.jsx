@@ -1,4 +1,6 @@
 import React from 'react'
+import { MdDelete} from "react-icons/md";
+import editar from '/src/assets/Edit/editar.svg/'
 
 const RecursosTabla = ({recursos, handleDelete, handleEdit   }) => {
     return (
@@ -22,11 +24,11 @@ const RecursosTabla = ({recursos, handleDelete, handleEdit   }) => {
                         <td className="border-b-2 px-4 py-2 text-sm">{recurso.funcionalidad}</td>
                         <td className="border-b-2 px-4 py-2 text-sm">{recurso.fk_proyecto}</td>
                         <td className="border-b-2 px-4 py-2 text-sm">
-                            <button onClick={() => handleDelete(recurso.id_recurso)} className="bg-red-500 text-white px-2 py-1 rounded-md">
-                                Eliminar
+                            <button onClick={() => handleDelete(recurso.id_recurso)} className="  text-red-500 x-2 py-1 rounded-md">
+                                <MdDelete/>
                             </button>
-                            <button onClick={() => handleEdit(recurso.id_recurso, recurso.nombre, recurso.tipo_recurso, recurso.funcionalidad, recurso.fk_proyecto)} className="bg-blue-500 text-white px-2 py-1 rounded-md ml-2">
-                                Editar
+                            <button onClick={() => handleEdit(recurso.id_recurso, recurso.nombre, recurso.tipo_recurso, recurso.funcionalidad, recurso.fk_proyecto)} className=" text-white px-2 py-1 rounded-md ml-2">
+                                <img className='h-[3vh] w-[3vw]' src={editar}/>
                             </button>
                         </td>
                     </tr>

@@ -105,7 +105,7 @@ const Proyectos = () => {
       <div className="flex justify-between mx-[1%] py-[.5%] ">
         <p className="text-4xl font-semibold">Proyecto</p>
         <button onClick={() => setAgregarProyecto(true)} className="bg-black rounded-md text-white px-2 py-1">
-          + Agregar proyecto
+           Agregar proyecto
         </button>
       </div>
 

@@ -160,7 +160,7 @@ const RecursosAdmin = () => {
     <div className="w-full">
       <div className="flex justify-between mx-[1%] py-[.5%]">
         <p className="text-4xl font-semibold">Recursos</p>
-        <button className=' bg-blue-500  px-2 py-2 text-white rounded-xl' onClick={handleShowModal}>Mostrar Modal</button>
+        <button className=' bg-black text-white px-4 py-2 ml-2 rounded-md' onClick={handleShowModal}>Agregar recursos</button>
       </div>
       
       <div className=' mx-10'>

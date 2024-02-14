@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MdDelete } from 'react-icons/md';
+import editar from '/src/assets/Edit/editar.svg'
 
 const EquiposTabla = ({ equipos, handleDeleteEquipo }) => {
     const [proyectoSeleccionadoId, setProyectoSeleccionadoId] = useState('');
@@ -89,7 +90,9 @@ const EquiposTabla = ({ equipos, handleDeleteEquipo }) => {
                             
                                 </td>
                                 <button onClick={() => handleDeleteEquipo(equipo.id_equipo)} className=" text-red-500 px-2 py-1 rounded-md"> <MdDelete /></button>
-                                <button onClick={() => openEditModal(equipo)} className="bg-blue-500 text-white px-2 py-1 rounded-md ml-2">Editar</button>
+                                <button onClick={() => openEditModal(equipo)} className=" text-white px-2 py-1 rounded-md ml-2">
+                                    <img className='h-[3vh] w-[3vw]' src={editar}/>
+                                </button>
                             </td>
                         </tr>
                     ))}
