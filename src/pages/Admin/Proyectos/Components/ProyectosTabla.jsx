@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { MdDelete} from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 import add from "/src/assets/Add/add.svg"
 import moment from 'moment';
 import recurso from "/src/assets/Resource/recurso.svg"
 import axios from 'axios';
+import EditProyect from './EditProyect';
 
 
 
@@ -14,6 +15,8 @@ const ProyectosTabla = ({ proyectos, getColorClass, handleOpenModal, fetchRecurs
     const [data, setData] = useState([])
     const [selectedProyectoId, setSelectedProyectoId] = useState(null);
     const [recursos, setRecursos] = useState([]);
+    const [editProyect, setEditProyect] = useState(false);
+    const [dataP, setDataP] = useState(false)
     const handleOpenRecursosModal = async (proyectoId) => {
         setSelectedProyectoId(proyectoId);
         const recursosData = await fetchRecursosPorProyecto(proyectoId);
@@ -38,12 +41,12 @@ const ProyectosTabla = ({ proyectos, getColorClass, handleOpenModal, fetchRecurs
         }
     };
 
-    const fetchData = async(idP) => {
+    const fetchData = async (idP) => {
         try {
-        const response = await axios.get(`https://localhost:8080/equipoProyect/${idP}`)
-        setData(response.data)
+            const response = await axios.get(`https://localhost:8080/equipoProyect/${idP}`)
+            setData(response.data)
         } catch (error) {
-            console.error('something went woring' ,error)
+            console.error('something went woring', error)
         }
     }
 
@@ -62,7 +65,7 @@ const ProyectosTabla = ({ proyectos, getColorClass, handleOpenModal, fetchRecurs
             throw error;
         }
     };
-    
+
     // Function to add a project to equipo
     const handleAsignar = async (id) => {
         try {
@@ -74,10 +77,15 @@ const ProyectosTabla = ({ proyectos, getColorClass, handleOpenModal, fetchRecurs
             throw error;
         }
     };
-    
+
     const openModal = (id) => {
         setidP(id)
         setModal(true)
+    }
+
+    const openEdit = (id) => {
+        setEditProyect(true)
+        setDataP(id)
     }
 
     return (
@@ -121,10 +129,10 @@ const ProyectosTabla = ({ proyectos, getColorClass, handleOpenModal, fetchRecurs
                                 </td>
 
                                 <td className="border-b-2 px-4 py-2 text-sm">
-                                {moment(proyecto.fecha_inicio, 'YYYY-MM-DD hh:mm:ss').format('YYYY-MM-DD HH:mm:ss')}
+                                    {moment(proyecto.fecha_inicio, 'YYYY-MM-DD hh:mm:ss').format('YYYY-MM-DD HH:mm:ss')}
                                 </td>
                                 <td className="border-b-2 px-4 py-2 text-sm">
-                                {moment(proyecto.fecha_fin, 'YYYY-MM-DD hh:mm:ss').format('YYYY-MM-DD HH:mm:ss')}
+                                    {moment(proyecto.fecha_fin, 'YYYY-MM-DD hh:mm:ss').format('YYYY-MM-DD HH:mm:ss')}
                                 </td>
                                 <td
                                     className={`border-b-2 px-4 py-2 text-sm ${getColorClass(
@@ -145,15 +153,18 @@ const ProyectosTabla = ({ proyectos, getColorClass, handleOpenModal, fetchRecurs
                                     </td>
                                 </td>
 
-                                <td className="border-b-2 px-4 py-2 text-sm">
-                                    <button className=' text-green-500' onClick={()=>openModal(proyecto.id_proyecto)}>
-                                    <img className='h-[5vh] w-[5vw]' src={add}/>
-                                
+                                <td className="border-b-2 px-4 py-2 text-sm flex items-center justify-center">
+                                    <button className=' text-green-500' onClick={() => openModal(proyecto.id_proyecto)}>
+                                        <img className='h-[5vh] w-[5vw]' src={add} />
+
+                                    </button>
+                                    <button className=' text-green-500 bg-indigo-500 px-4  rounded-md ' onClick={() => openEdit(proyecto)}>
+                                        <p className=" text-white text-xl ">Edit</p>
                                     </button>
                                 </td>
                                 <td className="border-b-2 px-4 py-2 text-sm">
                                     <button className=' text-red-500'>
-                                       <img className='h-[5vh] w-[5vw]' src={recurso}/>
+                                        <img className='h-[5vh] w-[5vw]' src={recurso} />
                                     </button>
                                 </td>
 
@@ -162,7 +173,7 @@ const ProyectosTabla = ({ proyectos, getColorClass, handleOpenModal, fetchRecurs
                                         <MdDelete />
                                     </button>
                                 </td>
-                               
+
 
                             </tr>
                         ))}
@@ -199,50 +210,75 @@ const ProyectosTabla = ({ proyectos, getColorClass, handleOpenModal, fetchRecurs
 
 
 
+            {editProyect && (
+                <div className="fixed z-10 inset-0 overflow-y-auto">
+                    <div className="flex items-center justify-center min-h-screen">
+                        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+
+                        <div className="relative bg-white rounded-lg w-96 p-6">
+                            <div className="absolute top-0 right-0">
+                                <button className="text-gray-500 hover:text-gray-700">
+
+                                </button>
+                            </div>
+
+                            <h2 className="text-xl font-semibold mb-4">Editar Proyecto</h2>
+
+                            <EditProyect data={dataP}  >
+                                <button className='bg-red-500  mx-[1%] text-white font-bold py-2 px-4 rounded' onClick={() => setEditProyect(false)}>Cancelar</button>
+
+                            </EditProyect>
 
 
 
-
-    { modal && (
-        <div className="fixed z-10 inset-0 overflow-y-auto">
-            <div className="flex items-center justify-center min-h-screen">
-                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
-
-                <div className="relative bg-white rounded-lg w-96 p-6">
-                    <div className="absolute top-0 right-0">
-                        <button className="text-gray-500 hover:text-gray-700">
-                           
-                        </button>
+                        </div>
                     </div>
-
-                    <h2 className="text-xl font-semibold mb-4">Agregar Equipo</h2>
-
-                  
-                { data.map((item)=>(
-                <div className={`rounded-sm py-[.5%] my-1 px-[1.5%] flex items-center justify-between ${item.fk_proyecto !== null ? 'bg-green-100 border border-green-200 rounded-sm' : ''}`}>
-                    <h3>{item.nombre}</h3>
-                    <button 
-                        className={`text-xl cursor-pointer  ${item.fk_proyecto !== null ? 'text-red-500' : 'text-green-500'}`} 
-                        onClick={() => item.fk_proyecto !== null ? handleDesAsignar(item.id_equipo) : handleAsignar(item.id_equipo)}
-                    >
-                        {item.fk_proyecto !== null ? '-' : '+'}
-                    </button>
-                    </div>
-                    )) }
-
-                   <div className='text-right pt-8'>
-                    <button className='bg-green-500 text-white  rounded px-2'>Aceptar</button>
-                    <button className='bg-red-500  mx-[1%] text-white rounded px-2' onClick={()=>setModal(false)}>Cancelar</button>
-                   </div>
-
-
-                    
-
                 </div>
-            </div>
-        </div>
 
-    )}
+            )}
+
+
+
+            {modal && (
+                <div className="fixed z-10 inset-0 overflow-y-auto">
+                    <div className="flex items-center justify-center min-h-screen">
+                        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+
+                        <div className="relative bg-white rounded-lg w-96 p-6">
+                            <div className="absolute top-0 right-0">
+                                <button className="text-gray-500 hover:text-gray-700">
+
+                                </button>
+                            </div>
+
+                            <h2 className="text-xl font-semibold mb-4">Agregar Equipo</h2>
+
+
+                            {data.map((item) => (
+                                <div className={`rounded-sm py-[.5%] my-1 px-[1.5%] flex items-center justify-between ${item.fk_proyecto !== null ? 'bg-green-100 border border-green-200 rounded-sm' : ''}`}>
+                                    <h3>{item.nombre}</h3>
+                                    <button
+                                        className={`text-xl cursor-pointer  ${item.fk_proyecto !== null ? 'text-red-500' : 'text-green-500'}`}
+                                        onClick={() => item.fk_proyecto !== null ? handleDesAsignar(item.id_equipo) : handleAsignar(item.id_equipo)}
+                                    >
+                                        {item.fk_proyecto !== null ? '-' : '+'}
+                                    </button>
+                                </div>
+                            ))}
+
+                            <div className='text-right pt-8'>
+                                <button className='bg-green-500 text-white  rounded px-2'>Aceptar</button>
+                                <button className='bg-red-500  mx-[1%] text-white rounded px-2' onClick={() => setModal(false)}>Cancelar</button>
+                            </div>
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+
+            )}
 
 
 
