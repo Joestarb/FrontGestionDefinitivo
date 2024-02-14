@@ -29,7 +29,7 @@ function App() {
     const rolUsuario = sessionStorage.getItem('rol');
 
     // Verificar si el rol del usuario coincide con el rol autorizado
-    if (rolUsuario === rolAutorizado) {
+    if (rolUsuario === true) {
       return true;
     } else {
       // Redirigir a la página de inicio de sesión si no tiene permisos
@@ -41,8 +41,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/*" element={<Error404 />} />
-
+        
         {/* Rutas para el rol de administrador */}
         <Route
           path="/admin/*"
@@ -78,7 +77,7 @@ function App() {
 
         {/* Rutas para el rol de miembro */}
         <Route
-          path="/miembro/*"
+          path="/miembro/"
           element={(verificarRol('Diseñador') || verificarRol('Analista') || verificarRol('Programador')) && (
             <div>
               <SideBar />
@@ -102,7 +101,7 @@ function App() {
 
         {/* Rutas para el rol de líder */}
         <Route
-          path="/lider/*"
+          path="/lider/"
           element={verificarRol('Lider') && (
             <div>
               <SideBar />
