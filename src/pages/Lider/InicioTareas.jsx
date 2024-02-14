@@ -17,7 +17,7 @@ const InicioTareas = () => {
                     <img className='w-[100%]' src={cerrar} onClick={cerrarSesion} />
                 </Link>
 
-                <div className=' absolute  left-0  mx-24'>
+                <div className='absolute  left-0  mx-24'>
                     <div className='flex justify-between mx-2'>
                         <p className='text-4xl font-semibold'> Lider </p>
                     </div>

@@ -101,7 +101,7 @@ function App() {
 
         {/* Rutas para el rol de líder */}
         <Route
-          path="/lider/"
+          path="/lider/*"
           element={verificarRol('Lider') && (
             <div>
               <SideBar />
