@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { MdDelete } from "react-icons/md";
+import editar from "/src/assets/Edit/editar.svg"
 const MiembrosLider = () => {
     const recursosDummyData = [
         { id_recurso: 1, nombre: "Recurso 1", tipo_recurso: "Tipo 1", funcionalidad: "Funcionalidad 1", fk_proyecto: 1 },
@@ -29,12 +30,16 @@ const MiembrosLider = () => {
                 <tbody>
                     {recursosDummyData.map(item => (
                         <tr key={item.id_recurso}>
-                            <td className="border px-4 py-2">{item.id_recurso}</td>
-                            <td className="border px-4 py-2">{item.nombre}</td>
-                            <td className="border px-4 py-2">{item.tipo_recurso}</td>
-                            <td className="border px-4 py-2">{item.funcionalidad}</td>
-                            <td className="border px-4 py-2">{item.fk_proyecto}</td>
-                            <td className="border px-4 py-2">
+                            <td className="border-b-2 px-4 py-2 text-sm">{item.id_recurso}</td>
+                            <td className="border-b-2 px-4 py-2 text-sm">{item.nombre}</td>
+                            <td className="border-b-2 px-4 py-2 text-sm">{item.tipo_recurso}</td>
+                            <td className="border-b-2 px-4 py-2 text-sm">{item.funcionalidad}</td>
+                            <td className="border-b-2 px-4 py-2 text-sm">{item.fk_proyecto}</td>
+                            <td className="border-b-2 px-4 py-2 text-sm">
+
+                            <button onClick={() => handleDelete(item.id_recurso)} className=" text-red-500 text-3xl  font-bold py-2 px-4 rounded">
+                                   <img className='h-[5vh] w-[5vw]' src={editar}/>
+                                </button>
                                 <button onClick={() => handleDelete(item.id_recurso)} className=" text-red-500 text-3xl  font-bold py-2 px-4 rounded">
                                     <MdDelete/>
                                 </button>

@@ -1,7 +1,17 @@
-import React, { useState } from 'react';
-import { MdDelete } from "react-icons/md";
+import React, { useEffect, useState } from 'react';
+import { MdDelete} from "react-icons/md";
+import add from "/src/assets/Add/add.svg"
+import moment from 'moment';
+import recurso from "/src/assets/Resource/recurso.svg"
+import axios from 'axios';
+
+
+
 
 const ProyectosTabla = ({ proyectos, getColorClass, handleOpenModal, fetchRecursosPorProyecto }) => {
+    const [idP, setidP] = useState()
+    const [modal, setModal] = useState(false)
+    const [data, setData] = useState([])
     const [selectedProyectoId, setSelectedProyectoId] = useState(null);
     const [recursos, setRecursos] = useState([]);
     const handleOpenRecursosModal = async (proyectoId) => {
@@ -27,6 +37,49 @@ const ProyectosTabla = ({ proyectos, getColorClass, handleOpenModal, fetchRecurs
             console.error(`Error de red al intentar borrar el proyecto: ${error.message}`);
         }
     };
+
+    const fetchData = async(idP) => {
+        try {
+        const response = await axios.get(`https://localhost:8080/equipoProyect/${idP}`)
+        setData(response.data)
+        } catch (error) {
+            console.error('something went woring' ,error)
+        }
+    }
+
+    useEffect(() => {
+        if (idP) {
+            fetchData(idP);
+        }
+    }, [idP]);
+    const handleDesAsignar = async (id) => {
+        try {
+            const response = await axios.put(`https://localhost:8080/equiposProyectR/${id}`);
+            fetchData(idP)
+            return response.data;
+        } catch (error) {
+            console.error('Error removing project from equipo:', error);
+            throw error;
+        }
+    };
+    
+    // Function to add a project to equipo
+    const handleAsignar = async (id) => {
+        try {
+            const response = await axios.put(`https://localhost:8080/equiposProyect/${idP}/${id}`);
+            fetchData(idP)
+            return response.data;
+        } catch (error) {
+            console.error('Error adding project to equipo:', error);
+            throw error;
+        }
+    };
+    
+    const openModal = (id) => {
+        setidP(id)
+        setModal(true)
+    }
+
     return (
         <div className="overflow-x-auto">
             {proyectos.length > 0 ? (
@@ -68,10 +121,10 @@ const ProyectosTabla = ({ proyectos, getColorClass, handleOpenModal, fetchRecurs
                                 </td>
 
                                 <td className="border-b-2 px-4 py-2 text-sm">
-                                    {proyecto.fecha_inicio}
+                                {moment(proyecto.fecha_inicio, 'YYYY-MM-DD hh:mm:ss').format('YYYY-MM-DD HH:mm:ss')}
                                 </td>
                                 <td className="border-b-2 px-4 py-2 text-sm">
-                                    {proyecto.fecha_fin}
+                                {moment(proyecto.fecha_fin, 'YYYY-MM-DD hh:mm:ss').format('YYYY-MM-DD HH:mm:ss')}
                                 </td>
                                 <td
                                     className={`border-b-2 px-4 py-2 text-sm ${getColorClass(
@@ -93,10 +146,23 @@ const ProyectosTabla = ({ proyectos, getColorClass, handleOpenModal, fetchRecurs
                                 </td>
 
                                 <td className="border-b-2 px-4 py-2 text-sm">
-                                    <button className=' text-red-500' onClick={() => handleBorrarProyecto(proyecto.id_proyecto)}>
+                                    <button className=' text-green-500' onClick={()=>openModal(proyecto.id_proyecto)}>
+                                    <img className='h-[5vh] w-[5vw]' src={add}/>
+                                
+                                    </button>
+                                </td>
+                                <td className="border-b-2 px-4 py-2 text-sm">
+                                    <button className=' text-red-500'>
+                                       <img className='h-[5vh] w-[5vw]' src={recurso}/>
+                                    </button>
+                                </td>
+
+                                <td className="border-b-2 px-4 py-2 text-sm">
+                                    <button className='  text-red-500' onClick={() => handleBorrarProyecto(proyecto.id_proyecto)}>
                                         <MdDelete />
                                     </button>
                                 </td>
+                               
 
                             </tr>
                         ))}
@@ -129,6 +195,67 @@ const ProyectosTabla = ({ proyectos, getColorClass, handleOpenModal, fetchRecurs
                 </div>
 
             )}
+
+
+
+
+
+
+
+
+    { modal && (
+        <div className="fixed z-10 inset-0 overflow-y-auto">
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+
+                <div className="relative bg-white rounded-lg w-96 p-6">
+                    <div className="absolute top-0 right-0">
+                        <button className="text-gray-500 hover:text-gray-700">
+                           
+                        </button>
+                    </div>
+
+                    <h2 className="text-xl font-semibold mb-4">Agregar Equipo</h2>
+
+                  
+                { data.map((item)=>(
+                <div className={`rounded-sm py-[.5%] my-1 px-[1.5%] flex items-center justify-between ${item.fk_proyecto !== null ? 'bg-green-100 border border-green-200 rounded-sm' : ''}`}>
+                    <h3>{item.nombre}</h3>
+                    <button 
+                        className={`text-xl cursor-pointer  ${item.fk_proyecto !== null ? 'text-red-500' : 'text-green-500'}`} 
+                        onClick={() => item.fk_proyecto !== null ? handleDesAsignar(item.id_equipo) : handleAsignar(item.id_equipo)}
+                    >
+                        {item.fk_proyecto !== null ? '-' : '+'}
+                    </button>
+                    </div>
+                    )) }
+
+                   <div className='text-right pt-8'>
+                    <button className='bg-green-500 text-white  rounded px-2'>Aceptar</button>
+                    <button className='bg-red-500  mx-[1%] text-white rounded px-2' onClick={()=>setModal(false)}>Cancelar</button>
+                   </div>
+
+
+                    
+
+                </div>
+            </div>
+        </div>
+
+    )}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         </div>

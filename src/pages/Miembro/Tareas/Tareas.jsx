@@ -101,7 +101,7 @@ const Tareas = () => {
   return (
     <div className=' w-full'>
       <div className='flex justify-between mx-[1%] py-[.5%] '>
-        <p className=' text-4xl font-semibold'> Proyecto </p>
+        <p className=' text-4xl font-semibold'> Tareas</p>
 
 
       </div>  
@@ -109,9 +109,8 @@ const Tareas = () => {
       <div className=' mx-10'>
         <div className=' flex  text-lg  font-semibold border-b-2 border-[#cccccc] mt-12'>
           <div className='flex justify-around w-[35%] my-[.5%]'>
-          <p className='border-b-2 border-[#2E0364] px-2 text-[#2E0364] '>Proyecto</p>
-          <p>Equipo</p>
-          <p>Recurso</p>
+          <p className='border-b-2 border-[#2E0364] px-2 text-[#2E0364] '>Tareas</p>
+         
           </div>
         </div>
 

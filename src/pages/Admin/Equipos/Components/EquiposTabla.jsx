@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { MdDelete } from 'react-icons/md';
 
 const EquiposTabla = ({ equipos, handleDeleteEquipo }) => {
     const [proyectoSeleccionadoId, setProyectoSeleccionadoId] = useState('');
@@ -84,7 +85,10 @@ const EquiposTabla = ({ equipos, handleDeleteEquipo }) => {
                             <td className="border-b-2  pl-20 py-2 text-sm">{equipo.nombre}</td>
                             <td className="border-b-2  pl-20 py-2 text-sm">{getNombreProyecto(equipo)}</td>
                             <td className="border-b-2  pl-20 py-2 text-sm">
-                                <button onClick={() => handleDeleteEquipo(equipo.id_equipo)} className="bg-red-500 text-white px-2 py-1 rounded-md">Eliminar</button>
+                            <td className="border-b-2 px-4 py-2 text-sm">
+                            
+                                </td>
+                                <button onClick={() => handleDeleteEquipo(equipo.id_equipo)} className=" text-red-500 px-2 py-1 rounded-md"> <MdDelete /></button>
                                 <button onClick={() => openEditModal(equipo)} className="bg-blue-500 text-white px-2 py-1 rounded-md ml-2">Editar</button>
                             </td>
                         </tr>

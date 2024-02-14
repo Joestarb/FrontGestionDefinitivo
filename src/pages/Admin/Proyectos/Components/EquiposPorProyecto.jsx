@@ -19,6 +19,7 @@ const EquiposPorProyecto = ({selectedProyectoId,equiposPorProyecto, handleCloseM
                 <button className=" bg-red-500 p-2  text-white rounded-2xl" onClick={handleCloseModal}>
                     Cerrar
                 </button>
+                
             </div>
 
         </div>

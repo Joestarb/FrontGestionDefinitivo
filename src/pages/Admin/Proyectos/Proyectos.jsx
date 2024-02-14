@@ -67,7 +67,7 @@ const Proyectos = () => {
     if (proyectos.length > 0) {
       fetchEquiposPorProyecto();
     }
-  }, [proyectos]);
+  }, []);
 
   const getColorClass = (estado) => {
     // Función para obtener la clase de color basada en el estado del proyecto
