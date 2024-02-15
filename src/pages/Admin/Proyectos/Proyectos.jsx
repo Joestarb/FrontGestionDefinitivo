@@ -4,6 +4,7 @@ import EquiposPorProyecto from "./Components/EquiposPorProyecto";
 import ProyectoForm from "./Components/ProyectoForm";
 import ProyectosTabla from "./Components/ProyectosTabla";
 const Proyectos = () => {
+  const [trigger, setTrigger] = useState(false)
   const [proyectos, setProyectos] = useState([]); // Estado para almacenar los proyectos
   const [equiposPorProyecto, setEquiposPorProyecto] = useState({}); // Estado para almacenar los equipos por proyecto
   const [selectedProyectoId, setSelectedProyectoId] = useState(null); // Estado para almacenar el ID del proyecto seleccionado
@@ -21,6 +22,9 @@ const Proyectos = () => {
       console.error(error);
     }
   };
+  useEffect(() => {
+    fetchProyectos()
+  }, [trigger])
 
   const fetchRecursosPorProyecto = async (proyectoId) => {
     try {
@@ -49,7 +53,7 @@ const Proyectos = () => {
           }
           const equiposData = await response.json();
           equiposPorProyectoData[proyecto.id_proyecto] = equiposData;
-          
+
 
         })
       );
@@ -105,25 +109,25 @@ const Proyectos = () => {
       <div className="flex justify-between mx-[1%] py-[.5%] ">
         <p className="text-4xl font-semibold">Proyecto</p>
         <button onClick={() => setAgregarProyecto(true)} className="bg-black rounded-md text-white px-2 py-1">
-           Agregar proyecto
+          Agregar proyecto
         </button>
       </div>
 
       <div className="mx-10">
         <div className="flex text-lg font-semibold border-b-2 border-[#cccccc] mt-12">
           <div className="flex justify-around w-[35%] my-[.5%]">
-            <Link  to={'/admin/proyectos'}>
-            <button className="border-b-2 border-[#2E0364] px-2 text-[#2E0364]">
-              Proyecto
-            </button>
+            <Link to={'/admin/proyectos'}>
+              <button className="border-b-2 border-[#2E0364] px-2 text-[#2E0364]">
+                Proyecto
+              </button>
             </Link>
 
             <Link to={'/admin/equipos'}>
-            <button>Equipo</button>
+              <button>Equipo</button>
             </Link>
 
             <Link to={'/admin/recursos'}>
-            <button>Recurso</button>
+              <button>Recurso</button>
             </Link>
 
           </div>
@@ -133,20 +137,22 @@ const Proyectos = () => {
 
         </section>
         <ProyectosTabla
+          trigger = {trigger}
+          setTrigger ={setTrigger}
           proyectos={proyectos}
           getColorClass={getColorClass}
           handleOpenModal={handleOpenModal}
           fetchRecursosPorProyecto={fetchRecursosPorProyecto}
 
-          
+
         />
       </div>
       {
         selectedProyectoId && (
           <EquiposPorProyecto
-          selectedProyectoId  = {selectedProyectoId }
-          equiposPorProyecto  = {equiposPorProyecto }
-          handleCloseModal   = {handleCloseModal  }
+            selectedProyectoId={selectedProyectoId}
+            equiposPorProyecto={equiposPorProyecto}
+            handleCloseModal={handleCloseModal}
           />
         )
       }

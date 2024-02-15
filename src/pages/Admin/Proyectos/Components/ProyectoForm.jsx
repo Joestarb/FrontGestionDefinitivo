@@ -29,6 +29,8 @@ function ProyectoForm({setAgregarProyecto}) {
         fetchEstados();
     }, []);
 
+
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setProyectoData({ ...proyectoData, [name]: value });

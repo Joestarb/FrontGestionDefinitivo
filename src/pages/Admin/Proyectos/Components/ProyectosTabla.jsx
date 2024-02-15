@@ -5,11 +5,12 @@ import moment from 'moment';
 import recurso from "/src/assets/Resource/recurso.svg"
 import axios from 'axios';
 import EditProyect from './EditProyect';
+import editar from '/src/assets/Edit/editar.svg'
 
 
 
 
-const ProyectosTabla = ({ proyectos, getColorClass, handleOpenModal, fetchRecursosPorProyecto }) => {
+const ProyectosTabla = ({ setTrigger,proyectos, getColorClass, handleOpenModal, fetchRecursosPorProyecto }) => {
     const [idP, setidP] = useState()
     const [modal, setModal] = useState(false)
     const [data, setData] = useState([])
@@ -36,6 +37,7 @@ const ProyectosTabla = ({ proyectos, getColorClass, handleOpenModal, fetchRecurs
             } else {
                 console.error(`Error al borrar el proyecto con ID ${proyectoId}.`);
             }
+            setTrigger(trigger=>!trigger)
         } catch (error) {
             console.error(`Error de red al intentar borrar el proyecto: ${error.message}`);
         }
@@ -111,71 +113,54 @@ const ProyectosTabla = ({ proyectos, getColorClass, handleOpenModal, fetchRecurs
                     </thead>
                     <tbody>
 
-                        {proyectos.map((proyecto) => (
-                            <tr key={proyecto.id_proyecto} className="text-center">
-                                <td className="border-b-2 px-4 py-2 text-sm">
-                                    {proyecto.id_proyecto}
-                                </td>
-                                <td className="border-b-2 px-4 py-2 text-sm">
-                                    {proyecto.nombre}
-                                </td>
-                                <td className="border-b-2 px-4 py-2 text-sm">
-                                    {proyecto.descripcion}
-                                </td>
-                                <td className="border-b-2 px-4 py-2 text-sm"  >
-                                    <button onClick={() => handleOpenModal(proyecto.id_proyecto)}>
-                                        Ver Equipos
-                                    </button>
-                                </td>
+                    {proyectos.map((proyecto) => (
+    <tr key={proyecto.id_proyecto} className="text-center">
+        <td className="border-b-2 px-4 py-2 text-sm">
+            {proyecto.id_proyecto}
+        </td>
+        <td className="border-b-2 px-4 py-2 text-sm">
+            {proyecto.nombre}
+        </td>
+        <td className="border-b-2 px-4 py-2 text-sm">
+            {proyecto.descripcion}
+        </td>
+        <td className="border-b-2 px-4 py-2 text-sm">
+            <button onClick={() => handleOpenModal(proyecto.id_proyecto)}>
+                Ver Equipos
+            </button>
+        </td>
+        <td className="border-b-2 px-4 py-2 text-sm">
+            {moment(proyecto.fecha_inicio, 'YYYY-MM-DD hh:mm:ss').format('YYYY-MM-DD HH:mm:ss')}
+        </td>
+        <td className="border-b-2 px-4 py-2 text-sm">
+            {moment(proyecto.fecha_fin, 'YYYY-MM-DD hh:mm:ss').format('YYYY-MM-DD HH:mm:ss')}
+        </td>
+        <td className={`border-b-2 px-4 py-2 text-sm ${getColorClass(proyecto.fk_estado)}`}>
+            {proyecto.fk_estado === 1
+                ? "Completado"
+                : proyecto.fk_estado === 2
+                    ? "Pendiente"
+                    : proyecto.fk_estado === 3
+                        ? "En Proceso"
+                        : ""}
+        </td>
+        <td className="border-b-2 px-4 py-2 text-sm">
+            <button onClick={() => handleOpenRecursosModal(proyecto.id_proyecto)}>Ver Recursos</button>
+        </td>
+        <td className="border-b-2 px-4 py-2 text-sm flex items-center justify-center"> {/* Aquí ajustamos las acciones */}
+            <button className='text-green-500' onClick={() => openModal(proyecto.id_proyecto)}>
+                <img className='h-[5vh] w-[5vw]' src={add} />
+            </button>
+            <button className='px-4 rounded-md' onClick={() => openEdit(proyecto)}>
+                <img className='h-[5vh] w-[5vw]' src={editar}/>
+            </button>
+            <button className='text-red-500' onClick={() => handleBorrarProyecto(proyecto.id_proyecto)}>
+                <MdDelete />
+            </button>
+        </td>
+    </tr>
 
-                                <td className="border-b-2 px-4 py-2 text-sm">
-                                    {moment(proyecto.fecha_inicio, 'YYYY-MM-DD hh:mm:ss').format('YYYY-MM-DD HH:mm:ss')}
-                                </td>
-                                <td className="border-b-2 px-4 py-2 text-sm">
-                                    {moment(proyecto.fecha_fin, 'YYYY-MM-DD hh:mm:ss').format('YYYY-MM-DD HH:mm:ss')}
-                                </td>
-                                <td
-                                    className={`border-b-2 px-4 py-2 text-sm ${getColorClass(
-                                        proyecto.fk_estado
-                                    )}`}
-                                >
-                                    {proyecto.fk_estado === 1
-                                        ? "Completado"
-                                        : proyecto.fk_estado === 2
-                                            ? "Pendiente"
-                                            : proyecto.fk_estado === 3
-                                                ? "En Proceso"
-                                                : ""}
-                                </td>
-                                <td className="border-b-2 px-4 py-2 text-sm">
-                                    <td className="border-b-2 px-4 py-2 text-sm"  >
-                                        <button onClick={() => handleOpenRecursosModal(proyecto.id_proyecto)}>Ver Recursos</button>
-                                    </td>
-                                </td>
-
-                                <td className="border-b-2 px-4 py-2 text-sm flex items-center justify-center">
-                                    <button className=' text-green-500' onClick={() => openModal(proyecto.id_proyecto)}>
-                                        <img className='h-[5vh] w-[5vw]' src={add} />
-
-                                    </button>
-                                    <button className=' text-green-500 bg-indigo-500 px-4  rounded-md ' onClick={() => openEdit(proyecto)}>
-                                        <p className=" text-white text-xl ">Edit</p>
-                                    </button>
-                                </td>
-                                <td className="border-b-2 px-4 py-2 text-sm">
-                                    <button className=' text-red-500'>
-                                        <img className='h-[5vh] w-[5vw]' src={recurso} />
-                                    </button>
-                                </td>
-
-                                <td className="border-b-2 px-4 py-2 text-sm">
-                                    <button className='  text-red-500' onClick={() => handleBorrarProyecto(proyecto.id_proyecto)}>
-                                        <MdDelete />
-                                    </button>
-                                </td>
-
-
-                            </tr>
+                           
                         ))}
                     </tbody>
                 </table>
