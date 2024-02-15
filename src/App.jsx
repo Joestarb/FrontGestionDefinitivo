@@ -21,6 +21,8 @@ const cerrarSesion = () => {
 
 const verificarRol = (rolAutorizado) => {
   const rolUsuario = sessionStorage.getItem('rol');
+  console.log('Rol Usuario:', rolUsuario);
+  console.log('Rol Autorizado:', rolAutorizado);
   return rolUsuario === rolAutorizado;
 };
 
@@ -29,7 +31,9 @@ const AdminRoutes = () => (
     <SideBar />
     <div className="flex">
       <div className="flex border-r-[#cccccc] border h-[84vh] w-[5.1vw] flex-col justify-start py-[1.5%] gap-[10%] items-center">
-        <img className="w-[50%]" src={proyectos} alt="Proyectos" />
+        <Link to="/admin/proyectos">
+          <img className="w-[50%]" src={proyectos} alt="Proyectos" />
+        </Link>
         <Link to="/">
           <img className="w-[100%]" src={cerrar} alt="Cerrar Sesión" onClick={cerrarSesion} />
         </Link>
@@ -50,7 +54,9 @@ const MiembroRoutes = () => (
     <SideBar />
     <div className="flex">
       <div className="flex border-r-[#cccccc] border h-[84vh] w-[5.1vw] flex-col justify-start py-[1.5%] gap-[10%] items-center">
-        <img className="w-[50%]" src={proyectos} alt="Proyectos" />
+        <Link to="/miembro/tareas">
+          <img className="w-[50%]" src={proyectos} alt="Proyectos" />
+        </Link>
         <Link to="/">
           <img className="w-[100%]" src={cerrar} alt="Cerrar Sesión" onClick={cerrarSesion} />
         </Link>
@@ -84,8 +90,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="admin/*" element={verificarRol('Administrador') ? <AdminRoutes /> : <Navigate to="/" />} />
-        <Route path="miembro/*" element={(verificarRol('Diseñador') || verificarRol('Analista') || verificarRol('Programador')) ? <MiembroRoutes /> : <Navigate to="/" />} />
-        <Route path="lider/*" element={verificarRol('Lider') ? <LiderRoutes /> : <Navigate to="/" />} />
+<Route path="miembro/*" element={(verificarRol('Diseñador') || verificarRol('Analista') || verificarRol('Programador')) ? <MiembroRoutes /> : <Navigate to="/" />} />
+<Route path="lider/*" element={verificarRol('Lider') ? <LiderRoutes /> : <Navigate to="/" />} />
         <Route path="/*" element={<Error404 />} />
       </Routes>
     </BrowserRouter>

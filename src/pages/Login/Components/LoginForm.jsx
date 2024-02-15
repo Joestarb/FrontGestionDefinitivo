@@ -106,21 +106,20 @@ const handleLoginStep2 = async (e) => {
             // Redirigir según el rol
             switch (roleName) {
                 case 'Administrador':
-                    navigate('/administrador/proyectos');
+                    navigate('/admin/proyectos');
                     break;
                 case 'Lider':
-                    navigate('/Lider/proyectos');
-                    navigate('/Lider/equipos');
-                    navigate('/Lider/recursos');
+                    navigate('/lider/miembros');
+                    
                     break;
                 case 'Diseñador':
-                    navigate('/ruta_para_disenadores');
+                    navigate('/miembro/tareas');
                     break;
                 case 'Programador':
-                    navigate('/ruta_para_programadores');
+                    navigate('/miembro/tareas');
                     break;
                 case 'Analista':
-                    navigate('/ruta_para_analistas');
+                    navigate('/miembro/tareas');
                     break;
                 default:
                     // Agrega lógica para cualquier otro rol que pueda tener
